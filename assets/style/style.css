@@ -141,7 +141,6 @@ header {
     padding: 1rem 0.88rem;
     height: 22rem;
     max-height: 23rem;
-    width: 11rem;
 }
 
 
@@ -954,9 +953,35 @@ h3 {
 
 @media (min-width: 75rem) {
 
-.btn-unit.dropdown-content:hover {
-    display: flex;
-}
+    .dropdown-content {
+        display: none;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        background-color: var(--units-bg);
+        border-radius: 0.5rem;
+        position: absolute;
+        top: 100%;
+        right: 0;
+        z-index: 10000;
+        padding: 1rem 0.88rem;
+        height: 22rem;
+        max-height: 23rem;
+        opacity: 0;
+        visibility: hidden;
+        width: 11rem;
+        transition: opacity 1s ease-in-out, visibility 1s ease-in-out;
+    }
+
+    .dropdown-content.dropdown-content-active {
+        display: flex;
+    }
+
+    .btn-unit:hover .dropdown-content {
+        display: flex;
+        opacity: 1;
+        visibility: visible;
+    }
 
     /* Styling for the main and sections. */
 
