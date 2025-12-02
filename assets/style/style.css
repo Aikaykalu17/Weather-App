@@ -128,7 +128,7 @@ header {
 }
 
 .dropdown-content {
-    display: none;
+    display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
@@ -141,12 +141,17 @@ header {
     padding: 1rem 0.88rem;
     height: 22rem;
     max-height: 23rem;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s ease-in-out, visibility 0.4s ease-in-out;
 }
 
 
 
 .dropdown-content.dropdown-content-active {
     display: flex;
+    opacity: 1;
+    visibility: visible;
 }
 
 .switch-button {
@@ -950,11 +955,22 @@ h3 {
 
 /* ///////////////////////////////////////////////// */
 
+@media (min-width: 44rem) {
+    .skeleton-container {
+        display: none;
+        width: 90%;
+    }
+
+    .forecast-day-item {
+        height: 15rem;
+    }
+}
 
 @media (min-width: 75rem) {
 
+    /* Hover effect styling for the dropdown content and dropdown icon  */
     .dropdown-content {
-        display: none;
+        display: flex;
         flex-direction: column;
         justify-content: space-between;
         align-items: center;
@@ -975,6 +991,8 @@ h3 {
 
     .dropdown-content.dropdown-content-active {
         display: flex;
+        opacity: 1;
+        visibility: visible;
     }
 
     .btn-unit:hover .dropdown-content {
@@ -982,6 +1000,14 @@ h3 {
         opacity: 1;
         visibility: visible;
     }
+
+    .btn-unit:hover .icon-dropdown {
+        transition: transform 0.3s ease-in-out;
+        transform: rotate(-180deg);
+    }
+
+    /* ////////////////////////////////////////////////// */
+
 
     /* Styling for the main and sections. */
 
