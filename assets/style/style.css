@@ -1,0 +1,1340 @@
+:root {
+    --bg-color: hsl(243, 27%, 20%);
+    --white-text-color: hsl(0, 100%, 100%);
+    --bright-blue: hsl(233, 67%, 56%);
+    --units-bg: hsl(243, 23%, 24%);
+    --units-bg-lighter: hsl(243, 23%, 30%);
+    --units-bg-lightest: hsl(240, 6%, 70%);
+    --black-color: hsl(0, 0%, 0%);
+    --outline-blue: hsl(248, 70%, 36%);
+}
+
+@font-face {
+    font-family: 'Bricolage Grotesque';
+    src: url(/assets/fonts/Bricolage_Grotesque/BricolageGrotesque-VariableFont_opsz\,wdth\,wght.ttf);
+    font-weight: 400 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'DM Sans';
+    src: url(/assets/fonts/DM_Sans/DMSans-Italic-VariableFont_opsz\,wght.ttf);
+    font-weight: 400 700;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'DM Sans';
+    src: url(/assets/fonts/DM_Sans/static/DMSans-Bold.ttf);
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'DM Sans';
+    src: url(/assets/fonts/DM_Sans/static/DMSans-SemiBold.ttf);
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'DM Sans';
+    src: url(/assets/fonts/DM_Sans/static/DMSans-SemiBoldItalic.ttf);
+    font-weight: 700;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'DM Sans';
+    src: url(/assets/fonts/DM_Sans/static/DMSans-Light.ttf);
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: var(--bg-color);
+    width: 100%;
+    height: 100%;
+    gap: 1rem;
+    overflow-x: hidden;
+}
+
+/* Styling for the header and its components */
+header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    height: 4rem;
+    width: 100%;
+}
+
+.header-components {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 95%;
+}
+
+.menu-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    height: 2.5rem;
+    width: 6.5rem;
+    background-color: var(--units-bg);
+    border-radius: 0.6rem;
+}
+
+.menu-header-span {
+    color: var(--white-text-color);
+    font-family: 'Bricolage Grotesque', sans-serif;
+}
+
+.logo-svg {
+    height: 2rem;
+}
+
+/* Styling for the dropdown icon  */
+
+.icon-dropdown.active {
+    transition: transform 0.3s ease-in-out;
+    transform: rotate(-180deg);
+}
+
+/* //////////////////////////////////// */
+
+.btn-unit {
+    position: relative;
+    border-radius: 0.5rem;
+    outline: 1px solid var(--white-text-color);
+}
+
+.dropdown-content {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--units-bg);
+    border-radius: 0.5rem;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    z-index: 10000;
+    padding: 1rem 0.88rem;
+    height: 22rem;
+    max-height: 23rem;
+    width: 11rem;
+}
+
+.dropdown-content.dropdown-content-active {
+    display: flex;
+}
+
+.switch-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    height: 1.8rem;
+    width: 9rem;
+    border-radius: 0.4rem;
+    background-color: var(--units-bg);
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 0.7rem;
+    color: var(--white-text-color);
+    outline: 0.07rem solid var(--units-bg-lightest);
+}
+
+.switch-button:focus {
+    outline: 0.1rem solid var(--white-text-color);
+    outline-offset: 0.1rem;
+}
+
+.unit-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    width: 90%;
+}
+
+.unit-option {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--white-text-color);
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 0.9rem;
+    width: 100%;
+
+}
+
+.group-label {
+    font-size: 0.7rem;
+    color: var(--units-bg-lightest);
+    font-family: 'Bricolage Grotesque', sans-serif;
+}
+
+.icon-checkmark {
+    color: #8aff8a;
+    font-weight: bold;
+    visibility: hidden;
+    width: min-content;
+}
+
+.unit-option[aria-checked="true"] {
+    color: #FFFFFF;
+}
+
+.unit-option[aria-checked="true"] .checkmark {
+    visibility: visible;
+    opacity: 1;
+}
+
+.unit-option:focus {
+    outline: 0.3em solid #8aff8a;
+    outline-offset: -0.4rem;
+    background-color: #3b3a62;
+}
+
+.unit-group[aria-labelledby="wind-label"]::before {
+    content: "";
+    display: block;
+    height: 0.07rem;
+    width: 100%;
+    margin-top: 0.5rem;
+    background-color: var(--units-bg-lightest);
+    opacity: 0.5;
+
+}
+
+.unit-group[aria-labelledby="precip-label"]::before {
+    content: "";
+    display: block;
+    height: 0.07rem;
+    width: 100%;
+    margin-top: 0.5rem;
+    background-color: var(--units-bg-lightest);
+    opacity: 0.5;
+
+}
+
+/* ///////////////////////////////////// */
+
+/* Styling for the main and sections. */
+
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 90%;
+    height: 100%;
+    gap: 1.5rem;
+}
+
+.weather-prompt {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    gap: 1rem;
+}
+
+.weather-prompt-intro {
+    padding: 0.9rem;
+}
+
+h1 {
+    font-size: 3rem;
+    font-weight: 500;
+    color: var(--white-text-color);
+    text-align: center;
+    font-family: 'Bricolage Grotesque', sans-serif;
+}
+
+/* Styling for the search bar form and the search bar. */
+
+
+.search-place-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.7rem;
+    width: 100%;
+}
+
+.search-place {
+    height: 3rem;
+    width: 100%;
+    padding-left: 2.81rem;
+    border-radius: 0.5rem;
+    background-color: var(--units-bg);
+    border: none;
+    font-family: 'Bricolage Grotesque', sans-serif;
+    color: var(--white-text-color);
+}
+
+.search-place:focus {
+    outline: 0.1rem solid var(--white-text-color);
+    outline-offset: 0.1rem;
+}
+
+.search-place::placeholder {
+    color: var(--white-text-color);
+}
+
+.search-btn {
+    height: 3rem;
+    width: 100%;
+    border-radius: 0.5rem;
+    border: none;
+    background-color: var(--bright-blue);
+    color: var(--white-text-color);
+    font-size: 1rem;
+    cursor: pointer;
+    font-family: 'Bricolage Grotesque', sans-serif;
+}
+
+.search-btn:focus {
+    outline: 0.1rem solid var(--outline-blue);
+    outline-offset: 0.2rem;
+}
+
+.search-input-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.search-icon {
+    position: absolute;
+    top: 50%;
+    left: 0.94rem;
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+
+.progress-bar {
+    display: none;
+}
+
+.progress-bar.progress-active {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    border-radius: 0.5rem;
+    height: 3rem;
+    width: 100%;
+    padding: 0.5rem;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: var(--units-bg);
+
+}
+
+.progress-span {
+    color: var(--white-text-color);
+    font-family: 'Bricolage Grotesque', sans-serif;
+
+}
+
+/* ////////////////////////// */
+
+/* Styling for the weather current */
+
+.weather-current {
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    background-image: url(/assets/images/bg-today-small.svg);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    background-clip: content-box;
+    border-radius: 0.7rem;
+}
+
+.weather-current-details {
+    height: 15rem;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+
+h2 {
+    color: var(--white-text-color);
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 1.3rem;
+
+}
+
+.current-date {
+    color: var(--white-text-color);
+    font-family: 'Bricolage Grotesque', sans-serif;
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+}
+
+.current-temp-display {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    width: 100%;
+}
+
+.sun-svg {
+    width: 6.5rem;
+    height: auto;
+}
+
+.temp-value {
+    display: flex;
+}
+
+.temp-number {
+    font-size: 4rem;
+    color: var(--white-text-color);
+    font-family: 'Bricolage Grotesque', sans-serif;
+}
+
+.temp-unit-symbol {
+    font-size: 2rem;
+    color: var(--white-text-color);
+    font-family: 'Bricolage Grotesque', sans-serif;
+}
+
+/* ////////////////////////////////////////// */
+
+/* Styling for the details-grid */
+.details-grid {
+    width: 100%;
+    height: 100%;
+}
+
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.7rem;
+}
+
+.metric-item {
+    height: 6rem;
+    width: auto;
+    background-color: var(--units-bg);
+    color: var(--white-text-color);
+    border-radius: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    justify-content: center;
+    padding: 0 1rem;
+    font-family: 'Bricolage Grotesque', sans-serif;
+}
+
+dt {
+    font-family: 'Bricolage Grotesque', sans-serif;
+}
+
+dd {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    width: 80%;
+}
+
+/* ////////////////////////////////////////////// */
+
+/* Styling for the daily forecast grid */
+.daily-forecast {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    gap: 1rem;
+}
+
+.forecast-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+}
+
+.forecast-day-item {
+    height: 10rem;
+    width: auto;
+    background-color: var(--units-bg);
+    color: var(--white-text-color);
+    border-radius: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.grid-svg {
+    width: 100%;
+}
+
+.high-temp {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 0.9rem;
+}
+
+.low-temp {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 0.9rem;
+}
+
+.span-temp-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+/* //////////////////////////////////// */
+
+/* Styling for the hourly forecast section */
+
+.hourly-forecast-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    gap: 1rem;
+    background-color: var(--units-bg);
+    padding: 1rem 0;
+    border-radius: 0.5rem;
+}
+
+.hourly-forecast-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    width: 95%;
+}
+
+.hourly-svg {
+    max-width: 80%;
+    width: 100%;
+    object-fit: contain;
+    object-position: center;
+}
+
+h3 {
+    color: var(--white-text-color);
+    font-family: 'Bricolage Grotesque', sans-serif;
+
+}
+
+.custom-select-wrapper {
+    position: relative;
+    font-family: 'Bricolage Grotesque', sans-serif;
+    background-color: var(--units-bg);
+    border-radius: 0.6rem;
+    outline: 1px solid var(--white-text-color);
+
+}
+
+.custom-select-display {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    height: 2.5rem;
+    width: 6.5rem;
+    border-radius: 0.6rem;
+    background-color: var(--units-bg-lighter);
+    color: var(--white-text-color);
+}
+
+.select-display {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    height: 2rem;
+    width: 7rem;
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 0.8rem;
+    border-radius: 0.5rem;
+    border: none;
+    background-color: var(--units-bg-lighter);
+    color: var(--white-text-color);
+}
+
+.select-options-list {
+    display: none;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-around;
+    position: absolute;
+    top: 100%;
+    left: -10%;
+    list-style: none;
+    background-color: var(--units-bg);
+    color: var(--white-text-color);
+    z-index: 10;
+    max-height: 20rem;
+    height: 15rem;
+    width: 8rem;
+    border-radius: 0.5rem;
+    padding: 0.9rem;
+}
+
+.select-options-list.select-options-list-active {
+    display: flex;
+}
+
+.custom-option-selected::after {
+    content: "";
+    display: block;
+    height: 0.07rem;
+    width: 100%;
+    margin-top: 0.5rem;
+    background-color: var(--units-bg-lightest);
+    opacity: 0.5;
+}
+
+.custom-option {
+    padding: 10px 5px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.custom-option-selected {
+    width: 100%;
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 0.8rem;
+}
+
+.custom-option:hover,
+.custom-option.selected {
+    background-color: #4a90e2;
+    color: #fff;
+}
+
+.hourly-forecast-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    height: 100%;
+    width: 95%;
+}
+
+.forecast-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.8rem;
+    background-color: var(--units-bg-lighter);
+    border-radius: 0.7rem;
+    height: 3rem;
+    width: 95%;
+}
+
+.temp-time {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.7rem;
+    white-space: nowrap;
+    width: min-content;
+    list-style: none;
+}
+
+
+.temp-number-hourly {
+    font-size: 1rem;
+    color: var(--white-text-color);
+    font-family: 'Bricolage Grotesque', sans-serif;
+}
+
+.temp-unit-symbol-hourly {
+    font-size: 0.8rem;
+    color: var(--white-text-color);
+    font-family: 'Bricolage Grotesque', sans-serif;
+}
+
+.time {
+    color: var(--white-text-color);
+    font-family: 'Bricolage Grotesque', sans-serif;
+}
+
+.condition {
+    color: var(--white-text-color);
+    font-family: 'Bricolage Grotesque', sans-serif;
+}
+
+.icon-overcast {
+    width: 100%;
+}
+
+.hourly-forecast-svg {
+    width: 100%;
+}
+
+/* ////////////////////////////////////////////////////// */
+
+
+/* Styling for the error section*/
+.error-section {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--bg-color);
+    z-index: 100;
+}
+
+.error-section.error-active {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100vh;
+}
+
+.error-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    padding: 2rem;
+    text-align: center;
+    max-width: 28rem;
+}
+
+.error-icon {
+    width: 6rem;
+    height: 6rem;
+}
+
+.error-title {
+    color: var(--white-text-color);
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 2rem;
+    font-weight: 500;
+    margin: 0;
+}
+
+.error-message {
+    color: var(--white-text-color);
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 1rem;
+    line-height: 1.5;
+    opacity: 0.8;
+    max-width: 24rem;
+}
+
+.error-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    height: 3rem;
+    min-width: 8rem;
+    padding: 0 1.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: 'Bricolage Grotesque', sans-serif;
+    color: var(--white-text-color);
+    background-color: var(--bright-blue);
+    border: none;
+    border-radius: 0.5rem;
+    transition: background-color 0.2s ease;
+}
+
+.error-btn:hover {
+    background-color: hsl(233, 67%, 60%);
+}
+
+.error-btn:focus {
+    outline: 0.15rem solid var(--white-text-color);
+    outline-offset: 0.15rem;
+}
+
+.error-btn img {
+    width: 1.25rem;
+    height: 1.25rem;
+}
+
+/* //////////////////////////////////////////////////////// */
+
+/* Styling for shimmer effects/skeletal loading */
+.skeleton-container {
+    display: none;
+}
+
+.skeleton-container.active {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.skeleton-box {
+    background: linear-gradient(90deg,
+            var(--bg-color) 0%,
+            var(--units-bg-lighter)50%,
+            var(--bg-color)100%);
+    background-size: 200% 100%;
+    animation: shimmer 5s infinite linear;
+    border-radius: 0.5rem;
+    position: relative;
+    overflow: hidden;
+    color: transparent;
+}
+
+.weather-header-skeleton {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    height: 4rem;
+    width: 100%;
+}
+
+.weather-header-components-skeleton {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.weather-prompt-skeleton {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    gap: 1rem;
+}
+
+.weather-prompt-intro-skeleton {
+    height: 100%;
+    width: 100%;
+}
+
+.form-skeleton {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.7rem;
+    width: 100%;
+}
+
+.weather-current-skeleton {
+    height: 15rem;
+}
+
+.details-grid-skeleton {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.7rem;
+}
+
+.daily-forecast-skeleton {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+    overflow-x: auto;
+}
+
+.hourly-forecast-skeleton {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    overflow-x: auto;
+
+}
+
+.weather-prompt-skeleton .skeleton-box,
+.daily-forecast-skeleton .skeleton-box,
+.hourly-forecast-skeleton .skeleton-box {
+    min-width: 7rem;
+    flex-shrink: 0;
+}
+
+
+.attribution-skeleton {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    font-size: 0.8rem;
+    text-align: center;
+    color: var(--white-text-color);
+    font-family: 'Bricolage Grotesque', sans-serif;
+}
+
+/* Screen reader only - visibly hidden but accessible. */
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: no-wrap;
+    border-width: 0;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -63rem 0;
+    }
+
+    100% {
+        background-position: 63rem 0;
+    }
+}
+
+/* Styling for the footer */
+
+.attribution {
+    font-size: 0.8rem;
+    text-align: center;
+    color: var(--white-text-color);
+    font-family: 'Bricolage Grotesque', sans-serif;
+}
+
+.attribution a {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    color: var(--white-text-color);
+}
+
+/* ///////////////////////////////////////////////// */
+
+
+@media (min-width: 75rem) {
+
+
+
+    /* Styling for the main and sections. */
+
+    main {
+        display: grid;
+        grid-template-columns: 50rem 1fr;
+        grid-template-rows: auto auto;
+        align-items: center;
+        width: 90%;
+        height: 100%;
+        gap: 1rem;
+        position: relative;
+    }
+
+
+    /* Styling for the header */
+    .header-components {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        width: 90%;
+    }
+
+    .menu-header {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-around;
+        height: 2.5rem;
+        width: 8rem;
+        background-color: var(--units-bg);
+        border-radius: 0.6rem;
+    }
+
+    /* //////////////////////////////////// */
+
+    .weather-prompt {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        width: 100%;
+        gap: 3rem;
+        grid-column: 1 / 3;
+    }
+
+    .weather-prompt-intro {
+        padding: 0.9rem;
+    }
+
+    h1 {
+        font-size: 3rem;
+        font-weight: 500;
+        color: var(--white-text-color);
+        text-align: center;
+        font-family: 'Bricolage Grotesque', sans-serif;
+    }
+
+    /* Styling for the search bar form and the search bar. */
+
+
+    .search-place-form {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        gap: 1.9rem;
+        width: 100%;
+    }
+
+    .search-place {
+        height: 4rem;
+        width: 30rem;
+        padding-left: 5rem;
+        border-radius: 1rem;
+        background-color: var(--units-bg);
+        border: none;
+        font-family: 'Bricolage Grotesque', sans-serif;
+        font-size: 1.5rem;
+        color: var(--white-text-color);
+    }
+
+    .search-place:focus {
+        outline: 0.1rem solid var(--white-text-color);
+        outline-offset: 0.1rem;
+    }
+
+    .search-place::placeholder {
+        color: var(--white-text-color);
+    }
+
+    .search-btn {
+        height: 4rem;
+        width: 10rem;
+        border-radius: 1rem;
+        border: none;
+        background-color: var(--bright-blue);
+        color: var(--white-text-color);
+        font-size: 1rem;
+        cursor: pointer;
+        font-family: 'Bricolage Grotesque', sans-serif;
+        font-size: 1.5rem;
+    }
+
+    .search-btn:focus {
+        outline: 0.1rem solid var(--outline-blue);
+        outline-offset: 0.2rem;
+    }
+
+    .search-input-wrapper {
+        position: relative;
+        width: auto;
+    }
+
+    .search-icon {
+        position: absolute;
+        top: 50%;
+        left: 1.5rem;
+        transform: translateY(-50%);
+        pointer-events: none;
+        height: 2rem;
+    }
+
+    .progress-bar {
+        display: none;
+    }
+
+    .progress-bar.progress-active {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        border-radius: 0.5rem;
+        height: 3rem;
+        width: 100%;
+        padding: 0.5rem;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background-color: var(--units-bg);
+
+    }
+
+    .progress-span {
+        color: var(--white-text-color);
+        font-family: 'Bricolage Grotesque', sans-serif;
+
+    }
+
+    .skeleton-container.active {
+        display: grid;
+        grid-template-columns: 50rem 1fr;
+        grid-template-rows: auto auto;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        gap: 1rem;
+        position: relative;
+    }
+
+    .weather-current {
+        grid-column: 1;
+        grid-row: 2;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 50rem;
+        height: auto;
+        background-image: url(/assets/images/bg-today-large.svg);
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+        background-clip: content-box;
+        border-radius: 0.7rem;
+    }
+
+    .weather-current-details {
+        height: 15rem;
+        width: 45rem;
+    }
+
+    .details-grid {
+        grid-column: 1;
+        grid-row: 3;
+    }
+
+    .metrics-grid {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        gap: 0rem;
+
+    }
+
+    .metric-item {
+        height: 6rem;
+        width: 12rem;
+    }
+
+    .daily-forecast {
+        grid-column: 1;
+        grid-row: 4;
+    }
+
+    .hourly-forecast-section {
+        grid-column: 2;
+        grid-row: 2;
+        position: absolute;
+        top: 0;
+        right: 0;
+        z-index: 10;
+    }
+
+    .hourly-forecast-list {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: unset;
+        gap: 0.5rem;
+        height: 100%;
+        width: 95%;
+    }
+
+    .forecast-grid {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    .forecast-day-item {
+        height: 10rem;
+        width: 7rem;
+
+    }
+
+    /* Styling for shimmer effects/skeletal loading */
+    .skeleton-container {
+        display: grid;
+             grid-template-columns: 50rem 1fr;
+        grid-template-rows: auto auto;
+        align-items: center;
+        width: 90%;
+        height: 100%;
+        gap: 1rem;
+        position: relative;
+        gap: 5rem;
+    }
+
+    .skeleton-container.active {
+        display: grid;
+        grid-template-columns: 50rem 1fr;
+        grid-template-rows: auto auto;
+        align-items: center;
+        width: 90%;
+        height: 100%;
+        gap: 1rem;
+        position: relative;
+    }
+
+    .skeleton-box {
+        background: linear-gradient(90deg,
+                var(--bg-color) 0%,
+                var(--units-bg-lighter)50%,
+                var(--bg-color)100%);
+        background-size: 200% 100%;
+        animation: shimmer 5s infinite linear;
+        border-radius: 0.5rem;
+        position: relative;
+        overflow: hidden;
+        color: transparent;
+    }
+
+    .weather-header-skeleton {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        height: 4rem;
+        width: 100%;
+        position: absolute;
+        top: 0;
+    }
+
+    .weather-header-components-skeleton {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    .weather-prompt-skeleton {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: max-content;
+        width: 100%;
+        gap: 3rem;
+        grid-column: 1;
+        grid-row: 2;
+        position: absolute;
+        top: 0;
+    }
+
+    .weather-prompt-intro-skeleton {
+        height: 100%;
+        width: 100%;
+    }
+
+    .form-skeleton {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0.7rem;
+        width: 100%;
+    }
+
+    .weather-current-skeleton {
+        grid-column: 1;
+        grid-row: 3;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 15rem;
+        background-image: url(/assets/images/bg-today-large.svg);
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+        background-clip: content-box;
+        border-radius: 0.7rem;
+    }
+
+    .details-grid-skeleton {
+        display: flex;
+
+        grid-column: 1;
+        grid-row: 4;
+    }
+
+    .daily-forecast-skeleton {
+        display: flex;
+        grid-column: 1;
+        grid-row: 5;
+    }
+
+    .hourly-forecast-skeleton {
+        grid-column: 2;
+        grid-row: 3;
+        /* position: absolute; */
+        top: 0;
+        right: 0;
+        z-index: 10;
+        width: 50rem;
+    }
+
+    .weather-prompt-skeleton .skeleton-box,
+    .daily-forecast-skeleton .skeleton-box,
+    .hourly-forecast-skeleton .skeleton-box {
+        max-width: 100%;
+        flex-shrink: 0;
+    }
+
+
+    .attribution-skeleton {
+        display: flex;
+        flex-direction: column;
+        gap: 0.3rem;
+        font-size: 0.8rem;
+        text-align: center;
+        color: var(--white-text-color);
+        font-family: 'Bricolage Grotesque', sans-serif;
+        grid-row: 6;
+    }
+
+}
+
+
+/* ////////////////////////// */
