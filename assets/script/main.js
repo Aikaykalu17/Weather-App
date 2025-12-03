@@ -14,8 +14,23 @@ import {
 
 } from './view.js'
 
-import { getAndDisplayWeather,buildDailyDataFromHourly,reverseGeocodeCoordinates, getCoordinates } from './logic.js';
-import {state, searchButton, searchInput, progressBar} from './state.js'
+import { getAndDisplayWeather, buildDailyDataFromHourly, reverseGeocodeCoordinates, getCoordinates } from './logic.js';
+import { state, searchButton, searchInput, progressBar, errorBtn, iconRetry, iconLoading } from './state.js'
+
+
+const startSpinner = () => {
+  iconRetry.classList.add('is-loading');
+  iconLoading.classList.add('is-loading');
+  errorBtn.disabled = true;
+};
+
+
+const stopSpinner = () => {
+ iconRetry.classList.remove('is-loading');
+ iconLoading.classList.remove('is-loading');
+  errorBtn.disabled = false;
+};
+
 
 // Retry handler is attached during DOMContentLoaded to ensure the DOM element exists
 /* ---------- Global delegated click listeners ---------- */
@@ -83,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Ensure day select elements exist
   ensureDaySelectElements();
   const buttonContainer = document.querySelector('.btn-unit');
-  
+
   buttonContainer.addEventListener('click', () => {
     const iconDropdown = document.querySelector('.icon-dropdown');
     if (iconDropdown) {
@@ -103,6 +118,8 @@ document.addEventListener('DOMContentLoaded', () => {
       retryBtn.removeEventListener('click', retryBtn._handler);
 
     retryBtn._handler = async function () {
+      startSpinner();
+
       // Disable button while checking connection
       retryBtn.setAttribute('disabled', 'true');
 
@@ -190,6 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // If we got here successfully, hide the error
+        stopSpinner();
         hideError();
       } catch (err) {
         console.error('Retry failed:', err);
@@ -298,9 +316,11 @@ document.addEventListener('DOMContentLoaded', () => {
       const coordinates = await getCoordinates(placeName);
       if (coordinates) {
         progressBar.classList.add('progress-active');
+        startSpinner();
         await getAndDisplayWeather(coordinates);
       }
       progressBar.classList.remove('progress-active');
+      stopSpinner();
       searchInput.value = '';
     });
   }

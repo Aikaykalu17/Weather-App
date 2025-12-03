@@ -16,6 +16,8 @@ export const state = {
 export const main = document.querySelector('main');
 export const errorSection = document.querySelector('.error-section');
 export const errorBtn = document.querySelector('.error-btn');
+export const iconRetry = document.querySelector('.icon-retry');
+export const iconLoading = document.querySelector('.icon-loading'); 
 
 export const dayListContainer = document.getElementById('day-list');
 export const selectDisplay = document.querySelector('.select-display');

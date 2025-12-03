@@ -940,6 +940,19 @@ h3 {
     }
 }
 
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.icon-retry.is-loading,
+.icon-loading.is-loading
+{
+    animation: spin 1s linear infinite;
+}
+
+
 /* Styling for the footer */
 
 .attribution {
