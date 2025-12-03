@@ -214,11 +214,6 @@ header {
     opacity: 1;
 }
 
-.unit-option:focus {
-    outline: 0.3em solid #8aff8a;
-    outline-offset: -0.4rem;
-    background-color: #3b3a62;
-}
 
 .unit-group[aria-labelledby="wind-label"]::before {
     content: "";
@@ -602,7 +597,7 @@ h3 {
 }
 
 .select-options-list {
-    display: none;
+    display: flex;
     flex-direction: column;
     align-items: flex-start;
     justify-content: space-around;
@@ -618,10 +613,16 @@ h3 {
     width: 8rem;
     border-radius: 0.5rem;
     padding: 0.9rem;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 1s ease-in-out, visibility 1s ease-in-out;
+
 }
 
 .select-options-list.select-options-list-active {
     display: flex;
+    opacity: 1;
+    visibility: visible;
 }
 
 .custom-option-selected::after {
@@ -1008,6 +1009,26 @@ h3 {
 
     /* ////////////////////////////////////////////////// */
 
+    .select-options-list {
+        display: flex;
+        opacity: 0;
+        visibility: hidden;
+        width: 11rem;
+        transition: opacity 1s ease-in-out, visibility 1s ease-in-out;
+
+    }
+
+    .custom-select-wrapper:hover .select-options-list {
+        display: flex;
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .select-options-list.select-options-list-active {
+        display: flex;
+        opacity: 1;
+        visibility: visible;
+    }
 
     /* Styling for the main and sections. */
 
@@ -1210,6 +1231,7 @@ h3 {
         top: 0;
         right: 0;
         z-index: 10;
+        height: 100%;
     }
 
     .hourly-forecast-list {
