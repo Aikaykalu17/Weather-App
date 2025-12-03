@@ -811,6 +811,7 @@ h3 {
 /* Styling for shimmer effects/skeletal loading */
 .skeleton-container {
     display: none;
+    width: 90%;
 }
 
 .skeleton-container.active {
@@ -952,6 +953,16 @@ h3 {
     animation: spin 1s linear infinite;
 }
 
+/* Reveal sections on scroll */
+.section {
+  transition: transform 1s, opacity 1s;
+}
+
+.section-hidden {
+  opacity: 0;
+  transform: translateY(15rem);
+}
+/* /////////////////////////////////////////////////
 
 /* Styling for the footer */
 

@@ -15,9 +15,29 @@ import {
 } from './view.js'
 
 import { getAndDisplayWeather, buildDailyDataFromHourly, reverseGeocodeCoordinates, getCoordinates } from './logic.js';
-import { state, searchButton, searchInput, progressBar, errorBtn, iconRetry, iconLoading } from './state.js'
+import { state, searchButton, searchInput, progressBar, errorBtn, iconRetry, iconLoading,sections } from './state.js'
 
 
+
+// Reveal Elements on scroll
+const revealSection = function (entries, observer) {
+  const [entry] = entries;
+  if (!entry.isIntersecting) return;
+  entry.target.classList.remove('section-hidden');
+  observer.unobserve(entry.target);
+};
+const sectionObserver = new IntersectionObserver(revealSection, {
+  root: null,
+  threshold: 0.2,
+});
+sections.forEach(function (section) {
+  sectionObserver.observe(section);
+  section.classList.add('section-hidden');
+});
+
+
+
+// Functions to make the retry and loading svgs to rotate 360deg.
 const startSpinner = () => {
   iconRetry.classList.add('is-loading');
   iconLoading.classList.add('is-loading');
@@ -26,10 +46,12 @@ const startSpinner = () => {
 
 
 const stopSpinner = () => {
- iconRetry.classList.remove('is-loading');
- iconLoading.classList.remove('is-loading');
+  iconRetry.classList.remove('is-loading');
+  iconLoading.classList.remove('is-loading');
   errorBtn.disabled = false;
 };
+/////////////////////////////////////////////////////////////
+
 
 
 // Retry handler is attached during DOMContentLoaded to ensure the DOM element exists

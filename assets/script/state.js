@@ -29,7 +29,7 @@ export const countryName = document.querySelector('.country-name');
 export const searchButton = document.querySelector('.search-btn');
 export const searchInput = document.querySelector('.search-place');
 export const progressBar = document.querySelector('.progress-bar');
-
+export const sections = document.querySelectorAll('.section');
 
 export const celsiusButton = document.querySelector('[data-unit="celsius"]');
 export const fahrenheitButton = document.querySelector('[data-unit="fahrenheit"]');
