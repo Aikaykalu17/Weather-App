@@ -8,6 +8,7 @@ import {
   convertmmToInches,
   convertHourlyDataToObjects,
 } from './helpers.js';
+
 import {
 state, searchInput, countryName, cityName, dateElement
 } from './state.js';
@@ -469,6 +470,7 @@ export const populateDaySelect = dailyData => {
 export const ensureDaySelectElements = function () {
   const wrapper = document.querySelector('.custom-select-wrapper');
   if (!wrapper) return;
+  
   // create select-display if missing
   if (!document.querySelector('.select-display')) {
     const btn = document.createElement('button');

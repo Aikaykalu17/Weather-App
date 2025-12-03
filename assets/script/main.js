@@ -28,13 +28,13 @@ const revealSection = function (entries, observer) {
 };
 const sectionObserver = new IntersectionObserver(revealSection, {
   root: null,
-  threshold: 0.2,
+  threshold: 0.0,
 });
 sections.forEach(function (section) {
   sectionObserver.observe(section);
   section.classList.add('section-hidden');
 });
-
+// ////////////////////////////////////////////////////
 
 
 // Functions to make the retry and loading svgs to rotate 360deg.
@@ -69,7 +69,7 @@ document.addEventListener('click', e => {
     dropDownContent.classList.remove('dropdown-content-active');
   }
 
-  // day select - close when clicked outside
+  // Day select (close when clicked outside).
   const selectDisplayEl = document.querySelector('.select-display');
   const dayListEl = document.getElementById('day-list');
   if (

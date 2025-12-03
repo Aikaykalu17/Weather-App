@@ -941,6 +941,7 @@ h3 {
     }
 }
 
+/* Styling for the retry and loading svgs to rotate 360deg */
 @keyframes spin {
     to {
         transform: rotate(360deg);
@@ -948,20 +949,24 @@ h3 {
 }
 
 .icon-retry.is-loading,
-.icon-loading.is-loading
-{
+.icon-loading.is-loading {
     animation: spin 1s linear infinite;
 }
 
+/* ////////////////////////////////////////////////// */
+
+
+
 /* Reveal sections on scroll */
 .section {
-  transition: transform 1s, opacity 1s;
+    transition: transform 1s, opacity 1s;
 }
 
 .section-hidden {
-  opacity: 0;
-  transform: translateY(15rem);
+    opacity: 0;
+    transform: translateY(15rem);
 }
+
 /* /////////////////////////////////////////////////
 
 /* Styling for the footer */
@@ -981,6 +986,25 @@ h3 {
 /* ///////////////////////////////////////////////// */
 
 @media (min-width: 44rem) {
+
+    .menu-header {
+        width: 9rem;
+    }
+
+    .search-place-form {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        gap: 0.7rem;
+        width: 100%;
+    }
+
+    .search-btn {
+        width: 20rem;
+
+    }
+
     .skeleton-container {
         display: none;
         width: 90%;
