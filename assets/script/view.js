@@ -213,13 +213,15 @@ export const updateMainDisplay = function (coords, weatherData) {
         : `${precipitationSum} mm`;
   }
 
+  // const displayCityName =
+  //   coords && (coords.timezone || coords.cityName)
+  //     ? coords.timezone
+  //       ? coords.timezone.split('/').pop().replace(/_/g, ' ')
+  //       : coords.cityName
+  //     : 'Unknown';
+  
   // City / country
-  const displayCityName =
-    coords && (coords.timezone || coords.cityName)
-      ? coords.timezone
-        ? coords.timezone.split('/').pop().replace(/_/g, ' ')
-        : coords.cityName
-      : 'Unknown';
+  const displayCityName = coords.cityName || 'Unknown city'; 
   cityName.textContent = displayCityName + ', ';
   countryName.textContent = coords?.country || '';
   cityName.appendChild(countryName);
@@ -470,7 +472,7 @@ export const populateDaySelect = dailyData => {
 export const ensureDaySelectElements = function () {
   const wrapper = document.querySelector('.custom-select-wrapper');
   if (!wrapper) return;
-  
+
   // create select-display if missing
   if (!document.querySelector('.select-display')) {
     const btn = document.createElement('button');

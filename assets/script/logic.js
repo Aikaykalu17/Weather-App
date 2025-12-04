@@ -46,6 +46,7 @@ export const getCoordinates = async function (placeName) {
     const data = await response.json();
     if (data && data.results && data.results.length > 0) {
       const topResult = data.results[0];
+      console.log(topResult)
       return {
         latitude: topResult.latitude,
         longitude: topResult.longitude,
@@ -72,14 +73,15 @@ export const reverseGeocodeCoordinates = async function (lat, lon) {
     window.location.hostname === '127.0.0.1';
 
   // Only try geocoding API if NOT on localhost
+  
   if (!isLocalhost) {
     try {
       const geocodeResponse = await fetch(
         `https://geocoding-api.open-meteo.com/v1/reverse?latitude=${lat}&longitude=${lon}&count=1`
       ).catch(() => null);
-
       if (geocodeResponse?.ok) {
         const data = await geocodeResponse.json();
+        console.log(data)
         if (data?.results?.[0]) {
           return {
             latitude: lat,
@@ -94,7 +96,7 @@ export const reverseGeocodeCoordinates = async function (lat, lon) {
       // Silently continue to timezone fallback
     }
   }
-
+  
   // Fallback: use the forecast endpoint which has CORS enabled
   try {
     const tzRes = await fetch(
@@ -102,14 +104,16 @@ export const reverseGeocodeCoordinates = async function (lat, lon) {
     );
     if (tzRes?.ok) {
       const tzJson = await tzRes.json();
+      console.log(tzJson)
       const timezone = tzJson.timezone || 'UTC';
       const parts = timezone.split('/');
       const inferredCityName =
-        parts.length > 1 ? parts.pop().replace(/_/g, ' ') : 'Lagos';
+        parts.length > 1 ? parts.pop().replace(/_/g, ' ') : 'Local Area';
+        console.log(inferredCityName)
       return {
         latitude: lat,
         longitude: lon,
-        cityName: inferredCityName,
+        cityName: inferredCityName === 'Lagos' ? 'Abuja' : inferredCityName,
         country: 'Nigeria', // For Nigerian coordinates, we know the country
         timezone,
       };
@@ -122,7 +126,7 @@ export const reverseGeocodeCoordinates = async function (lat, lon) {
   return {
     latitude: lat,
     longitude: lon,
-    cityName: 'Lagos',
+    cityName: 'Local Area',
     country: 'Nigeria',
   };
 };
@@ -161,15 +165,13 @@ export const getAndDisplayWeather = async function (coords) {
     console.error('Invalid coordinates received. Cannot fetch weather data');
     return;
   }
-state.currentDisplayCoords = coords;
+  state.currentDisplayCoords = coords;
 
-  const forecastUrl = `https://api.open-meteo.com/v1/forecast?latitude=${
-    coords.latitude
-  }&longitude=${
-    coords.longitude
-  }&hourly=temperature_2m,weather_code,apparent_temperature,windspeed_10m,relative_humidity_2m&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum&timezone=${encodeURIComponent(
-    coords.timezone || 'auto'
-  )}&current_weather=true&forecast_days=7`;
+  const forecastUrl = `https://api.open-meteo.com/v1/forecast?latitude=${coords.latitude
+    }&longitude=${coords.longitude
+    }&hourly=temperature_2m,weather_code,apparent_temperature,windspeed_10m,relative_humidity_2m&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum&timezone=${encodeURIComponent(
+      coords.timezone || 'auto'
+    )}&current_weather=true&forecast_days=7`;
   try {
     const response = await fetch(forecastUrl);
     if (!response.ok) {

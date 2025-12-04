@@ -364,6 +364,7 @@ document.addEventListener('DOMContentLoaded', () => {
           position.coords.longitude
         );
         if (coords) {
+          console.log(coords)
           await getAndDisplayWeather(coords);
           hideSkeletonLoading();
         } else {

@@ -1,4 +1,5 @@
 'use strict';
+
 export const getWeatherIcon = (weatherCode) => {
   switch (weatherCode) {
     // Clear sky
