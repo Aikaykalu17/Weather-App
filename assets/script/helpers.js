@@ -1,5 +1,7 @@
 'use strict';
 
+
+// This is a helper function that displays the corresponding weather icon depending on the weather code.
 export const getWeatherIcon = (weatherCode) => {
   switch (weatherCode) {
     // Clear sky
@@ -55,11 +57,11 @@ export const getWeatherIcon = (weatherCode) => {
 
   }
 }
+//////////////////////////////////////
 
-export const getLastFetchedCoordinates = function () {
-  return currentDisplayCoords;
-};
-/* normalize hourly API structure -> array of {time, temperature} */
+/* Normalize hourly API structure -> array of {time, temperature} */
+// This fucntion takes raw hourly weather data(time and temperature arrays)
+//  and transforms it into a standardised array of simple javaScript objects.
 export const convertHourlyDataToObjects = function (hourlyData) {
   if (
     !hourlyData ||
@@ -72,7 +74,11 @@ export const convertHourlyDataToObjects = function (hourlyData) {
 
   const processedArray = [];
   const loopLimit = hourlyData.time.length;
+  
+  // Loops from 0 - 168.
   for (let i = 0; i < loopLimit; i++) {
+    // Checks if temperature_2m exists, if it does, assign it to temp, 
+    // if it doesn't exist use temperature[i]. If both fail, use null.
     const temp =
       hourlyData.temperature_2m && hourlyData.temperature_2m[i] !== undefined
         ? hourlyData.temperature_2m[i]
@@ -84,9 +90,13 @@ export const convertHourlyDataToObjects = function (hourlyData) {
       temperature: temp,
     });
   }
+  // This has been converted to a standardised array of simple javaScript objects.
   return processedArray;
 };
+
 /* ---------- Utilities ---------- */
+// THis function takes a date string, converts it into a javascript date object.
+// It must convert a date string into a javaScript Date object because the string alone is just text.
 export const getDayName = function (dateString, full = false, tz) {
   try {
     const date = new Date(dateString);
@@ -102,9 +112,11 @@ export const getDayName = function (dateString, full = false, tz) {
 export const convertCelsiusToFahrenheit = function (celsius) {
   return parseFloat(((celsius * 9) / 5 + 32).toFixed(1));
 };
+
 export const convertKmToMph = function (kmh) {
   return parseFloat((kmh * 0.621371).toFixed(1));
 };
+
 export const convertmmToInches = function (mm) {
   return parseFloat((mm * 0.0393701).toFixed(2));
 };

@@ -10,38 +10,58 @@ import {
 } from './helpers.js';
 
 import {
-state, searchInput, countryName, cityName, dateElement
+  state, searchInput, countryName, cityName, city, dateElement
 } from './state.js';
 
 /* ---------- Render daily forecast (keeps existing behavior) ---------- */
 export const renderDailyForecast = function (weatherData) {
+
+  // Safety check
   if (!weatherData) return;
   const dailyContainer = document.querySelector('.forecast-grid');
   if (!dailyContainer) return;
+  // ///////////////////////////////
 
+  // Empties the container before any other thing. 
   dailyContainer.innerHTML = '';
+  //////////////////////////////////////////////
 
+  // If weatherData.daily and weatherData.daily.time exists.
   if (weatherData.daily && weatherData.daily.time) {
     const dailyObj = weatherData.daily;
+    console.log(dailyObj)
     const weatherCodeDaily = weatherData.daily.weather_code;
 
     for (let i = 0; i < dailyObj.time.length; i++) {
+      // Extracts the weather property at the current index/position.
       const dateString = dailyObj.time[i];
       const weatherCode = weatherCodeDaily[i];
-      // base Celsius values (store in data attributes)
+      console.log(dateString, weatherCode)
+
+      // Base Celsius values (store in data attributes). If dailyObj.temperature_2m_max exists, 
+      // then baseMax(high temp) will be dailyObj.temperature_2m_max at the current position or null.
       const baseMax = dailyObj.temperature_2m_max
         ? dailyObj.temperature_2m_max[i]
         : null;
+      //  If dailyObj.temperature_2m_min exists, 
+      // then baseMin(low temp) will be dailyObj.temperature_2m_min at the current position or null.
       const baseMin = dailyObj.temperature_2m_min
         ? dailyObj.temperature_2m_min[i]
         : null;
 
+      // Checks if baxemax is valid(not null or undefined), 
+      // checks the state of the isImperial, if it is imperial, it converts the basemax to fahrenheit, 
+      // if isImperial is metric, it just rounds the basemax.
       const displayMax =
         baseMax !== null && baseMax !== undefined
           ? state.isImperial
             ? Math.round(convertCelsiusToFahrenheit(baseMax))
             : Math.round(baseMax)
           : '-';
+
+      // Checks if baxemin is valid(not null or undefined).
+      //  checks the state of the isImperial, if it is imperial, it converts the basemin to fahrenheit, 
+      // if isImperial is metric, it just rounds the basemin.
       const displayMin =
         baseMin !== null && baseMin !== undefined
           ? state.isImperial
@@ -59,12 +79,10 @@ export const renderDailyForecast = function (weatherData) {
           <dd>
             <img src="${dailyIconSrc}" alt="${dailyIconAlt}" class="hourly-svg" aria-label="${dailyIconAlt}" />
             <div class="span-temp-container">
-              <span class="high-temp" data-celsius="${
-                baseMax !== null && baseMax !== undefined ? baseMax : ''
-              }">${displayMax}°</span>
-              <span class="low-temp" data-celsius="${
-                baseMin !== null && baseMin !== undefined ? baseMin : ''
-              }">${displayMin}°</span>
+              <span class="high-temp" data-celsius="${baseMax !== null && baseMax !== undefined ? baseMax : ''
+        }">${displayMax}°</span>
+              <span class="low-temp" data-celsius="${baseMin !== null && baseMin !== undefined ? baseMin : ''
+        }">${displayMin}°</span>
         
             </div>
             </dd>
@@ -75,8 +93,7 @@ export const renderDailyForecast = function (weatherData) {
 
     const sd = document.querySelector('.select-display');
     if (sd && weatherData.daily.time && weatherData.daily.time[0]) {
-      const { src: dailyIconSrc, alt: dailyIconAlt } =
-        getWeatherIcon(weatherCodeDaily);
+
       sd.textContent = new Date(weatherData.daily.time[0]).toLocaleDateString(
         'en-US',
         { weekday: 'long' }
@@ -112,18 +129,17 @@ export const renderDailyForecast = function (weatherData) {
             : '-';
         const unit = isImperial ? '°F' : '°C';
         const dayName = getDayName(date);
+
         const dailyItemHTML = `
         <div class="forecast-day-item">
           <dt>${dayName}</dt>
           <dd>
-            <img src="${dailyIconSrc}" alt="" class="hourly-svg" aria-label="Overcast Icon" />
+            <img src="${dailyIconSrc}" alt="${dailyIconAlt}" class="hourly-svg" aria-label="${dailyIconAlt}" />
             <div class="span-temp-container">
-              <span class="high-temp" data-celsius="${
-                baseMax !== null ? baseMax : ''
-              }">${displayMax}</span>
-              <span class="low-temp" data-celsius="${
-                baseMin !== null ? baseMin : ''
-              }">${displayMin}</span>
+              <span class="high-temp" data-celsius="${baseMax !== null ? baseMax : ''
+          }">${displayMax}</span>
+              <span class="low-temp" data-celsius="${baseMin !== null ? baseMin : ''
+          }">${displayMin}</span>
               <span class="temp-unit-symbol">${unit}</span>
             </div>
           </dd>
@@ -135,10 +151,11 @@ export const renderDailyForecast = function (weatherData) {
 };
 
 export const updateMainDisplay = function (coords, weatherData) {
-  if (!cityName || !dateElement || !countryName) {
+  if (!cityName || !dateElement || !countryName || !city) {
     console.error('Missing DOM elements for main display');
     return;
   }
+
   if (!weatherData || !weatherData.current_weather) return;
 
   state.currentDisplayCoords = coords;
@@ -163,9 +180,8 @@ export const updateMainDisplay = function (coords, weatherData) {
   const mainTempEl = document.querySelector('.temp-number');
   if (mainTempEl) {
     mainTempEl.setAttribute('data-celsius', String(currentTemperature));
-    mainTempEl.textContent = `${Math.round(displayTemp)}°${
-      state.isImperial ? 'F' : 'C'
-    }`;
+    mainTempEl.textContent = `${Math.round(displayTemp)}°${state.isImperial ? 'F' : 'C'
+      }`;
   }
 
   const unitSymbolEl = document.querySelector('.temp-unit-symbol');
@@ -180,9 +196,8 @@ export const updateMainDisplay = function (coords, weatherData) {
         ? convertCelsiusToFahrenheit(feelsLikeTemp)
         : feelsLikeTemp;
     if (v !== null && v !== undefined)
-      feelsLikeDisplay.textContent = `${Math.round(v)}°${
-        state.isImperial ? 'F' : 'C'
-      }`;
+      feelsLikeDisplay.textContent = `${Math.round(v)}°${state.isImperial ? 'F' : 'C'
+        }`;
   }
 
   // Humidity
@@ -219,11 +234,14 @@ export const updateMainDisplay = function (coords, weatherData) {
   //       ? coords.timezone.split('/').pop().replace(/_/g, ' ')
   //       : coords.cityName
   //     : 'Unknown';
-  
-  // City / country
-  const displayCityName = coords.cityName || 'Unknown city'; 
+
+  // City / Country
+  const displayCityName = coords.cityName || 'Unknown city';
   cityName.textContent = displayCityName + ', ';
+
   countryName.textContent = coords?.country || '';
+  city.textContent = (coords?.city ? coords.city + ', ' : ' ') || '';
+  cityName.appendChild(city)
   cityName.appendChild(countryName);
 
   const now = new Date();
@@ -236,8 +254,10 @@ export const updateMainDisplay = function (coords, weatherData) {
   if (coords && coords.timezone && coords.timezone !== 'auto')
     options.timeZone = coords.timezone;
   const formattedDate = now.toLocaleDateString('en-US', options);
+  console.log(formattedDate)
   if (dateElement) {
-    dateElement.textContent = formattedDate.replace(/,/g, '');
+    // dateElement.textContent = formattedDate.replace(/,/g, '');
+    dateElement.textContent = formattedDate;
     dateElement.setAttribute('datetime', now.toISOString().split('T')[0]);
   }
 
@@ -325,6 +345,13 @@ export const handleDaySelection = dailyData => {
     const fullDayName = selectedDate.toLocaleDateString('en-US', {
       weekday: 'long',
     });
+    const formattedSelectedDate = selectedDate.toLocaleDateString('en-US', {
+      weekday: 'short',
+      year: 'numeric',
+      month: 'short',
+      day: '2-digit',
+    });
+    dateElement.textContent = formattedSelectedDate;
 
     // compute max/min from that day's hourly temps (normalize)
     const temps = dayArray
@@ -502,9 +529,8 @@ export const clearAllCheckmarks = function () {
 export const updateAllUnitCheckmarks = function () {
   // show/hide checkmarks based on isImperial and current units
   const cMark = document.querySelector('[data-unit="celsius"] .icon-checkmark');
-  const fMark = document.querySelector(
-    '[data-unit="fahrenheit"] .icon-checkmark'
-  );
+  const fMark = document.querySelector('[data-unit="fahrenheit"] .icon-checkmark');
+
   if (cMark) cMark.style.visibility = !state.isImperial ? 'visible' : 'hidden';
   if (fMark) fMark.style.visibility = state.isImperial ? 'visible' : 'hidden';
 
@@ -670,7 +696,7 @@ export const showError = function (message = null, context = null) {
     btn.removeAttribute('disabled');
     try {
       btn.focus({ preventScroll: true });
-    } catch (_) {}
+    } catch (_) { }
   }
 
   // Prevent scrolling on the body when error is shown
@@ -703,11 +729,11 @@ export const hideError = function () {
   if (searchInput) {
     try {
       searchInput.focus({ preventScroll: true });
-    } catch (_) {}
+    } catch (_) { }
   } else if (document.body) {
     try {
       document.body.focus();
-    } catch (_) {}
+    } catch (_) { }
   }
 
   // clear stored context when error dismissed

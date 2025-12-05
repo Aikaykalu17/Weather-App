@@ -26,6 +26,7 @@ export const dateElement = document.querySelector('.weather-date');
 export const tempNumber = document.querySelector('.temp-number');
 export const weatherIcon = document.querySelector('.sun-svg');
 export const countryName = document.querySelector('.country-name');
+export const city = document.querySelector('.city'); 
 export const searchButton = document.querySelector('.search-btn');
 export const searchInput = document.querySelector('.search-place');
 export const progressBar = document.querySelector('.progress-bar');

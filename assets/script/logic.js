@@ -12,7 +12,7 @@ import {
 } from './view.js';
 
 
-import { state } from './state.js';
+import { city, state } from './state.js';
 import { convertHourlyDataToObjects } from './helpers.js';
 
 
@@ -31,6 +31,7 @@ export const fetchData = async function (url) {
   }
 };
 
+// When a search is made, this fucntion tries to get the coordinates of the city searched for.
 export const getCoordinates = async function (placeName) {
   const geocodingURL = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(
     placeName
@@ -50,6 +51,7 @@ export const getCoordinates = async function (placeName) {
       return {
         latitude: topResult.latitude,
         longitude: topResult.longitude,
+        city: topResult.admin1,
         cityName: topResult.name,
         country: topResult.country,
         timezone: topResult.timezone,
@@ -66,6 +68,7 @@ export const getCoordinates = async function (placeName) {
   }
 };
 
+// This is the function that the navigator.geolocation calls to load the user's loaction weather information.
 export const reverseGeocodeCoordinates = async function (lat, lon) {
   // Skip geocoding attempt when on localhost to avoid CORS errors
   const isLocalhost =
@@ -87,6 +90,7 @@ export const reverseGeocodeCoordinates = async function (lat, lon) {
             latitude: lat,
             longitude: lon,
             cityName: data.results[0].name || 'Local Area',
+            city: data.results[0].admin1 || '',
             country: data.results[0].country || 'Nigeria',
             timezone: data.results[0].timezone || 'UTC',
           };
@@ -104,16 +108,14 @@ export const reverseGeocodeCoordinates = async function (lat, lon) {
     );
     if (tzRes?.ok) {
       const tzJson = await tzRes.json();
-      console.log(tzJson)
       const timezone = tzJson.timezone || 'UTC';
       const parts = timezone.split('/');
       const inferredCityName =
         parts.length > 1 ? parts.pop().replace(/_/g, ' ') : 'Local Area';
-        console.log(inferredCityName)
       return {
         latitude: lat,
         longitude: lon,
-        cityName: inferredCityName === 'Lagos' ? 'Abuja' : inferredCityName,
+        cityName: inferredCityName ,
         country: 'Nigeria', // For Nigerian coordinates, we know the country
         timezone,
       };
@@ -132,23 +134,28 @@ export const reverseGeocodeCoordinates = async function (lat, lon) {
 };
 
 /* ---------- Build grouped daily data ---------- */
+// This function converts a long array of hourly weather 
+// data into a more manageable object grouped by day.
 export const buildDailyDataFromHourly = hourly => {
   if (!hourly || !hourly.time || !Array.isArray(hourly.time)) return {};
+  // The [index] is dynamic and iterates the the entire array. What this means is that it represents 
+  // the position of the currently processed item in the hourly.time array. Using [index] means that for 
+  // the 5th time value in the array, you correctly fecth the 5th temperature and 5th weather code values.
   const combinedForecast = hourly.time.map((timeValue, index) => {
     return {
       time: timeValue,
       temperature:
-        hourly.temperature_2m && hourly.temperature_2m[index] !== undefined
-          ? hourly.temperature_2m[index]
-          : hourly.temperature && hourly.temperature[index],
+      hourly.temperature_2m && hourly.temperature_2m[index] !== undefined
+      ? hourly.temperature_2m[index]
+      : hourly.temperature && hourly.temperature[index],
       weathercode: hourly.weather_code[index],
 
       // add other props if needed (weathercode, etc.)
     };
   });
-  const getDateOnly = isoTimeString =>
-    typeof isoTimeString === 'string' ? isoTimeString.substring(0, 10) : '';
-
+  // This extracts the first string and stops before the 10th string. In the context of an ISO time string like
+  //  '2025-12-04T12:00:00z', this extracts the first 10 characters, which is just the date portion 2025-12-04.
+  const getDateOnly = isoTimeString => typeof isoTimeString === 'string' ? isoTimeString.substring(0, 10) : '';
   return combinedForecast.reduce((acc, forecast) => {
     const date = getDateOnly(forecast.time);
     if (!date) return acc;
@@ -165,6 +172,8 @@ export const getAndDisplayWeather = async function (coords) {
     console.error('Invalid coordinates received. Cannot fetch weather data');
     return;
   }
+
+  // The coords is the weather information of the current location.
   state.currentDisplayCoords = coords;
 
   const forecastUrl = `https://api.open-meteo.com/v1/forecast?latitude=${coords.latitude
@@ -186,7 +195,7 @@ export const getAndDisplayWeather = async function (coords) {
       console.error('Incomplete weather data received. Cannot update UI.');
       return;
     }
-
+  //  The weatherData is the result of the data fetched fromthe forecastUrl after its being parsed.
     state.globalCoords = coords;
     state.globalWeatherData = weatherData;
 

@@ -19,7 +19,7 @@ import { state, searchButton, searchInput, progressBar, errorBtn, iconRetry, ico
 
 
 
-// Reveal Elements on scroll
+// Functions to reveal Elements on scroll.
 const revealSection = function (entries, observer) {
   const [entry] = entries;
   if (!entry.isIntersecting) return;
@@ -57,7 +57,9 @@ const stopSpinner = () => {
 // Retry handler is attached during DOMContentLoaded to ensure the DOM element exists
 /* ---------- Global delegated click listeners ---------- */
 document.addEventListener('click', e => {
-  // header units dropdown
+
+  // Header units dropdown. If dropDownContent and unitButtonContainer exists and a click happens on an area other 
+  // than the dropDownContent and unitButtonContainer, the dropDownContent should be hidden.
   const dropDownContent = document.querySelector('.dropdown-content');
   const unitButtonContainer = document.querySelector('.btn-unit');
 
@@ -68,8 +70,10 @@ document.addEventListener('click', e => {
   ) {
     dropDownContent.classList.remove('dropdown-content-active');
   }
+// ///////////////////////////////////////////////
 
-  // Day select (close when clicked outside).
+  // Day select (close when clicked outside). If selectDisplay and dayList exists and a click happens on an 
+  // area other than the selectDisplay and dayList, the dropdown should be hidden.
   const selectDisplayEl = document.querySelector('.select-display');
   const dayListEl = document.getElementById('day-list');
   if (
@@ -81,53 +85,26 @@ document.addEventListener('click', e => {
     selectDisplayEl.setAttribute('aria-expanded', 'false');
     dayListEl.classList.remove('select-options-list-active');
   }
+// ///////////////////////////////////////////////
 
-  // hourly item dropdown toggle (delegated)
-  const toggle = e.target.closest('.hourly-dropdown-toggle');
-  if (toggle) {
-    const li = toggle.closest('.forecast-item');
-    if (!li) return;
-    const dropdown = li.querySelector('.hourly-dropdown');
-    if (!dropdown) return;
-    const open = dropdown.hasAttribute('hidden')
-      ? false
-      : dropdown.getAttribute('aria-hidden') === 'false';
-    // close other dropdowns
-    document.querySelectorAll('.hourly-dropdown').forEach(d => {
-      if (d !== dropdown) {
-        d.setAttribute('hidden', '');
-        const btn = d
-          .closest('.forecast-item')
-          ?.querySelector('.hourly-dropdown-toggle');
-        if (btn) btn.setAttribute('aria-expanded', 'false');
-      }
-    });
-    if (dropdown.hasAttribute('hidden')) {
-      dropdown.removeAttribute('hidden');
-      toggle.setAttribute('aria-expanded', 'true');
-    } else {
-      dropdown.setAttribute('hidden', '');
-      toggle.setAttribute('aria-expanded', 'false');
-    }
-    e.stopPropagation();
-    return;
-  }
 });
 
 /* ---------- Unit / menu handlers (DOMContentLoaded) ---------- */
 document.addEventListener('DOMContentLoaded', () => {
 
-  // Ensure day select elements exist
+  // Ensure day select elements exist.
   ensureDaySelectElements();
-  const buttonContainer = document.querySelector('.btn-unit');
 
+
+  // Event listener on the .btn-unit, to rotate the icon dropdown by toggling the active class.
+  const buttonContainer = document.querySelector('.btn-unit');
   buttonContainer.addEventListener('click', () => {
     const iconDropdown = document.querySelector('.icon-dropdown');
     if (iconDropdown) {
       iconDropdown.classList.toggle('active');
     }
   });
-
+// /////////////////////////////////////////////////////////////////////////
 
   // Attach retry button handler (do this here so the element exists)
 
@@ -135,17 +112,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const retryBtn = document.querySelector('.error-btn');
     if (!retryBtn) return;
 
-    // avoid adding multiple listeners
+    // Prevent/avoid adding multiple listeners.
     retryBtn.removeEventListener &&
       retryBtn.removeEventListener('click', retryBtn._handler);
 
+      // The underscore signals that the property is private and should not be accessed by external code. 
+      // It assigns an async function to the _handler property.
     retryBtn._handler = async function () {
       startSpinner();
 
       // Disable button while checking connection
       retryBtn.setAttribute('disabled', 'true');
 
-      // First check if we're online
+      // First check if we're online(if there is an active internet connection).
       if (!navigator.onLine) {
         showError(
           'No internet connection. Please check your network and try again.'
@@ -247,7 +226,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   attachRetry();
 
-  // wire header unit button toggle
+  // Wire header unit button toggle. This sets up the toggle behaviour for the unit button.
   const unitButtonContainer = document.querySelector('.btn-unit');
   const dropDownContent = document.querySelector('.dropdown-content');
   if (unitButtonContainer && dropDownContent) {
@@ -256,15 +235,19 @@ document.addEventListener('DOMContentLoaded', () => {
       dropDownContent.classList.toggle('dropdown-content-active');
     });
   }
+// ////////////////////////////////////////////////
 
-  // unit option clicks (dropdown-content .unit-option)
-  const unitOptions = document.querySelectorAll(
-    '.dropdown-content .unit-option'
-  );
+
+  // Unit option clicks (dropdown-content .unit-option). It records the user's selected unit. It iterates 
+  // through all elements with the class .dropdown-content .unit-option 
+  // and attaches a click listener to each one. When
+  //  an option is clicked, it gets the value of the data-unit 
+  // attribute and stores it in the unitType variable.
+  const unitOptions = document.querySelectorAll('.dropdown-content .unit-option');
   unitOptions.forEach(option => {
     option.addEventListener('click', function () {
       const unitType = this.getAttribute('data-unit');
-      // set global unit flags
+      // Set global unit flags
       if (unitType === 'fahrenheit') {
         state.isImperial = true;
         state.currentTempUnit = 'F';
@@ -281,25 +264,37 @@ document.addEventListener('DOMContentLoaded', () => {
         state.currentPrecipUnit = 'mm';
       }
 
-      // show checkmark
+      // Show checkmark
       clearAllCheckmarks();
+      // ////////////////////
+
+      // This checks for any icon-checkmark that is clicked on and sets the visibility 
+      // to visible after clearAllCheckmarks must have cleared all the visible checkmarks.
       const check = this.querySelector('.icon-checkmark');
       if (check) check.style.visibility = 'visible';
-      updateAllUnitCheckmarks();
+      // //////////////////////////////////
 
-      // update all displayed units
+      // This then updates the option that receives a click with the coresponding checkmark.
+      updateAllUnitCheckmarks();
+      // ///////////////////////////////////////////////
+
+
+      // Update all displayed units
       updateDisplayUnits('temperature', state.isImperial ? 'F' : 'C');
       updateDisplayUnits('wind', state.currentWindUnit === 'mph' ? 'mph' : 'kmh');
-      updateDisplayUnits(
-        'precipitation',
-        state.currentPrecipUnit === 'inches' ? 'inches' : 'mm'
-      );
+      updateDisplayUnits('precipitation', state.currentPrecipUnit === 'inches' ? 'inches' : 'mm');
 
-      // update entire UI to reflect conversions
+      // Update entire UI to reflect conversions. If the coords and globalWeatherData exists,
+      //  both should be used as arguments to update the main display. 
+      // These events are happening only when clicks happen on any of the unitOptions.  
       if (state.globalCoords && state.globalWeatherData) {
         updateMainDisplay(state.globalCoords, state.globalWeatherData);
+        // If data for hourly exists, it should be used to build hourly data
+        //  that'll be used to update the UI when a click happens on any of the unitOptions.
         if (state.globalWeatherData.hourly) {
+          // The entire data for hourly.
           const dailyData = buildDailyDataFromHourly(state.globalWeatherData.hourly);
+          // The data at the first position.
           const firstKey = Object.keys(dailyData)[0];
           if (firstKey) renderHourlyForecast(dailyData[firstKey]);
         }
@@ -307,7 +302,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // separate "switch" button if present in markup (keeps backward compatibility)
+  // Separate "switch" button if present in markup (keeps backward compatibility)
   const switchButton = document.querySelector('.switch-button');
   if (switchButton) {
     switchButton.addEventListener('click', () => {
@@ -321,13 +316,15 @@ document.addEventListener('DOMContentLoaded', () => {
           if (first) renderHourlyForecast(dailyData[first]);
         }
       }
+      // This switches the textcontext of the switch button. 
+      // If it is showing "Switch to Imperial", then it should change to "switxh to Metric" when a click event happens.
       switchButton.textContent = state.isImperial
         ? 'Switch to Metric'
         : 'Switch to Imperial';
     });
   }
 
-  // quick search handling (keeps existing behavior)
+  // Quick search handling (keeps existing behavior). This searches for cities.
   if (searchButton && searchInput) {
     searchButton.addEventListener('click', async e => {
       e.preventDefault();
@@ -337,6 +334,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const coordinates = await getCoordinates(placeName);
       if (coordinates) {
+        console.log(coordinates)
         progressBar.classList.add('progress-active');
         startSpinner();
         await getAndDisplayWeather(coordinates);
@@ -350,13 +348,16 @@ document.addEventListener('DOMContentLoaded', () => {
   // initial load: user's location first, fallback to country search if permission denied
   (async () => {
     showSkeletonLoading();
-    // (no-op) ensure DOM-dependent handlers are attached in DOMContentLoaded
+
+    // (no-op) Ensure DOM-dependent handlers are attached in DOMContentLoaded.
+    // If the location of the user is unavilable, it should fall back to using Nigeria as the default location.
     if (!navigator.geolocation) {
       const defaultCoords = await getCoordinates('Nigeria');
       if (defaultCoords) await getAndDisplayWeather(defaultCoords);
       return;
     }
 
+    // This gets the user's location weather information on load.
     navigator.geolocation.getCurrentPosition(
       async position => {
         const coords = await reverseGeocodeCoordinates(
@@ -364,7 +365,6 @@ document.addEventListener('DOMContentLoaded', () => {
           position.coords.longitude
         );
         if (coords) {
-          console.log(coords)
           await getAndDisplayWeather(coords);
           hideSkeletonLoading();
         } else {
