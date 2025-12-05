@@ -47,7 +47,6 @@ export const getCoordinates = async function (placeName) {
     const data = await response.json();
     if (data && data.results && data.results.length > 0) {
       const topResult = data.results[0];
-      console.log(topResult)
       return {
         latitude: topResult.latitude,
         longitude: topResult.longitude,

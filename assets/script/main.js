@@ -15,7 +15,7 @@ import {
 } from './view.js'
 
 import { getAndDisplayWeather, buildDailyDataFromHourly, reverseGeocodeCoordinates, getCoordinates } from './logic.js';
-import { state, searchButton, searchInput, progressBar, errorBtn, iconRetry, iconLoading,sections } from './state.js'
+import { state, searchButton, searchInput, progressBar, errorBtn, iconRetry, iconLoading, sections } from './state.js'
 
 
 
@@ -70,7 +70,7 @@ document.addEventListener('click', e => {
   ) {
     dropDownContent.classList.remove('dropdown-content-active');
   }
-// ///////////////////////////////////////////////
+  // ///////////////////////////////////////////////
 
   // Day select (close when clicked outside). If selectDisplay and dayList exists and a click happens on an 
   // area other than the selectDisplay and dayList, the dropdown should be hidden.
@@ -85,7 +85,7 @@ document.addEventListener('click', e => {
     selectDisplayEl.setAttribute('aria-expanded', 'false');
     dayListEl.classList.remove('select-options-list-active');
   }
-// ///////////////////////////////////////////////
+  // ///////////////////////////////////////////////
 
 });
 
@@ -104,7 +104,15 @@ document.addEventListener('DOMContentLoaded', () => {
       iconDropdown.classList.toggle('active');
     }
   });
-// /////////////////////////////////////////////////////////////////////////
+
+  const customWrapper = document.querySelector('.custom-select-wrapper');
+  customWrapper.addEventListener('click', () => {
+    const iconDropdown = document.querySelector('.dropdown-icon');
+    if (iconDropdown) {
+      iconDropdown.classList.toggle('active');
+    }
+  });
+  // /////////////////////////////////////////////////////////////////////////
 
   // Attach retry button handler (do this here so the element exists)
 
@@ -116,8 +124,8 @@ document.addEventListener('DOMContentLoaded', () => {
     retryBtn.removeEventListener &&
       retryBtn.removeEventListener('click', retryBtn._handler);
 
-      // The underscore signals that the property is private and should not be accessed by external code. 
-      // It assigns an async function to the _handler property.
+    // The underscore signals that the property is private and should not be accessed by external code. 
+    // It assigns an async function to the _handler property.
     retryBtn._handler = async function () {
       startSpinner();
 
@@ -165,7 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Fall back to default location (Nigeria)
             try {
-              const defaultCoords = await getCoordinates('Nigeria');
+              const defaultCoords = await getCoordinates();
               await getAndDisplayWeather(defaultCoords);
             } catch (defaultError) {
               console.error('Failed to get default coordinates:', defaultError);
@@ -235,7 +243,7 @@ document.addEventListener('DOMContentLoaded', () => {
       dropDownContent.classList.toggle('dropdown-content-active');
     });
   }
-// ////////////////////////////////////////////////
+  // ////////////////////////////////////////////////
 
 
   // Unit option clicks (dropdown-content .unit-option). It records the user's selected unit. It iterates 
@@ -334,7 +342,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const coordinates = await getCoordinates(placeName);
       if (coordinates) {
-        console.log(coordinates)
         progressBar.classList.add('progress-active');
         startSpinner();
         await getAndDisplayWeather(coordinates);

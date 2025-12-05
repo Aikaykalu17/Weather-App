@@ -199,7 +199,6 @@ header {
 }
 
 .icon-checkmark {
-    color: #8aff8a;
     font-weight: bold;
     visibility: hidden;
     width: min-content;
@@ -393,7 +392,7 @@ h2 {
     color: var(--white-text-color);
     font-family: 'Bricolage Grotesque', sans-serif;
     font-size: 1.14rem;
-
+    max-width: 90%;
 }
 
 .current-date {
@@ -623,6 +622,11 @@ h3 {
     display: flex;
     opacity: 1;
     visibility: visible;
+}
+
+.dropdown-icon.active {
+    transition: transform 0.3s ease-in-out;
+    transform: rotate(-180deg);
 }
 
 .custom-option-selected::after {
@@ -986,6 +990,11 @@ h3 {
 /* ///////////////////////////////////////////////// */
 
 @media (min-width: 44rem) {
+    
+    .skeleton-container {
+        display: none;
+        width: 90%;
+    }
 
     .menu-header {
         width: 9rem;
@@ -1005,9 +1014,12 @@ h3 {
 
     }
 
-    .skeleton-container {
-        display: none;
-        width: 90%;
+
+    .hourly-svg {
+        max-width: 60%;
+        width: 100%;
+        object-fit: contain;
+        object-position: center;
     }
 
     .forecast-day-item {
@@ -1055,6 +1067,11 @@ h3 {
         transform: rotate(-180deg);
     }
 
+    .custom-select-wrapper:hover .dropdown-icon {
+        transition: transform 0.3s ease-in-out;
+        transform: rotate(-180deg);
+    }
+
     /* ////////////////////////////////////////////////// */
 
     .select-options-list {
@@ -1077,6 +1094,7 @@ h3 {
         opacity: 1;
         visibility: visible;
     }
+
 
     /* Styling for the main and sections. */
 

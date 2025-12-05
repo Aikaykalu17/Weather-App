@@ -29,14 +29,12 @@ export const renderDailyForecast = function (weatherData) {
   // If weatherData.daily and weatherData.daily.time exists.
   if (weatherData.daily && weatherData.daily.time) {
     const dailyObj = weatherData.daily;
-    console.log(dailyObj)
     const weatherCodeDaily = weatherData.daily.weather_code;
 
     for (let i = 0; i < dailyObj.time.length; i++) {
       // Extracts the weather property at the current index/position.
       const dateString = dailyObj.time[i];
       const weatherCode = weatherCodeDaily[i];
-      console.log(dateString, weatherCode)
 
       // Base Celsius values (store in data attributes). If dailyObj.temperature_2m_max exists, 
       // then baseMax(high temp) will be dailyObj.temperature_2m_max at the current position or null.
@@ -150,6 +148,7 @@ export const renderDailyForecast = function (weatherData) {
   }
 };
 
+// This is the function that updates the UI/main display.
 export const updateMainDisplay = function (coords, weatherData) {
   if (!cityName || !dateElement || !countryName || !city) {
     console.error('Missing DOM elements for main display');
@@ -162,8 +161,9 @@ export const updateMainDisplay = function (coords, weatherData) {
   state.globalCoords = coords;
   state.globalWeatherData = weatherData;
 
+  // Gets the weather code of the current weather.
   const weatherCode = weatherData.current_weather.weathercode;
-
+  // Using destructuring to assign values the iconSrc and iconAlt variables.
   const { src: iconSrc, alt: iconAlt } = getWeatherIcon(weatherCode);
 
   const mainIcon = document.querySelector('.sun-svg');
@@ -172,6 +172,8 @@ export const updateMainDisplay = function (coords, weatherData) {
     mainIcon.setAttribute('alt', iconAlt);
   }
 
+  // Checks the state of the isImperial and updates the UI accordingly.
+  // If isImperial/switch button is switched to metric, the values should be converted to fahrenheit else, the normal figures should be displayed.
   const currentTemperature = weatherData.current_weather.temperature;
   const displayTemp = state.isImperial
     ? convertCelsiusToFahrenheit(currentTemperature)
@@ -228,12 +230,6 @@ export const updateMainDisplay = function (coords, weatherData) {
         : `${precipitationSum} mm`;
   }
 
-  // const displayCityName =
-  //   coords && (coords.timezone || coords.cityName)
-  //     ? coords.timezone
-  //       ? coords.timezone.split('/').pop().replace(/_/g, ' ')
-  //       : coords.cityName
-  //     : 'Unknown';
 
   // City / Country
   const displayCityName = coords.cityName || 'Unknown city';
@@ -251,12 +247,12 @@ export const updateMainDisplay = function (coords, weatherData) {
     month: 'short',
     day: 'numeric',
   };
+
   if (coords && coords.timezone && coords.timezone !== 'auto')
     options.timeZone = coords.timezone;
   const formattedDate = now.toLocaleDateString('en-US', options);
-  console.log(formattedDate)
+
   if (dateElement) {
-    // dateElement.textContent = formattedDate.replace(/,/g, '');
     dateElement.textContent = formattedDate;
     dateElement.setAttribute('datetime', now.toISOString().split('T')[0]);
   }
@@ -276,7 +272,10 @@ export const updateMainSummary = function (dailySummaryData) {
   const highTempEl = document.querySelector('.high-temp');
   const lowTempEl = document.querySelector('.low-temp');
 
-  // store base Celsius in data attributes so updateDisplayUnits can convert
+  // Store base Celsius in data attributes so updateDisplayUnits can convert.
+  // Checks if maxTemp and minTemp are valid(not null/undefined), the it sets an attribute on the HTML element for easy access and conversion
+  // It then checks the state of the isImperial/switch button. If it is switched to Imperial, 
+  // the value should be converted to fahrenheit else it should just be displayed.
   if (currentTempEl) {
     if (maxTemp !== null && maxTemp !== undefined) {
       currentTempEl.setAttribute('data-celsius', String(maxTemp));
@@ -324,7 +323,9 @@ export const handleDaySelection = dailyData => {
   const sd = document.querySelector('.select-display');
   if (!dl || !sd || !dailyData) return;
 
-  // delegate clicks on day list
+  // Delegate clicks on day list. This ensures that c click event is only 
+  // processed when a valid list item is clicked and then prevents the event from
+  //  affecting higher-level elements in the document.
   dl.removeEventListener('click', dl._dayClickHandler);
   dl._dayClickHandler = function (e) {
     const selectedLi = e.target.closest('li[data-value]');
@@ -332,6 +333,7 @@ export const handleDaySelection = dailyData => {
     e.stopPropagation();
 
     const selectedDateKey = selectedLi.getAttribute('data-value');
+    console.log(selectedDateKey)
     const dayArray = dailyData[selectedDateKey];
     if (!Array.isArray(dayArray) || dayArray.length === 0) {
       console.error(
@@ -355,7 +357,7 @@ export const handleDaySelection = dailyData => {
 
     // compute max/min from that day's hourly temps (normalize)
     const temps = dayArray
-      .map(hour => (hour.temperature !== undefined ? hour.temperature : null))
+      .map(hour => (hour.temperature && hour.weathercode !== undefined ? hour.temperature : null))
       .filter(v => v !== null);
     const maxTemp = temps.length ? Math.max(...temps) : null;
     const minTemp = temps.length ? Math.min(...temps) : null;
@@ -365,6 +367,7 @@ export const handleDaySelection = dailyData => {
       temperature_2m_min: minTemp,
       time: dayArray[0].time,
     };
+
 
     renderHourlyForecast(dayArray);
     updateMainSummary(newDaySummaryData);
@@ -383,7 +386,7 @@ export const handleDaySelection = dailyData => {
   };
   dl.addEventListener('click', dl._dayClickHandler);
 
-  // toggle open/close
+  // Toggle open/close
   sd.removeEventListener('click', sd._toggleHandler);
   sd._toggleHandler = function () {
     const isExpanded = sd.getAttribute('aria-expanded') === 'true';
@@ -410,27 +413,32 @@ export const renderHourlyForecast = dayData => {
   // Find the current hour's index
   const now = new Date();
   const currentHour = now.getHours();
+
   const currentIndex = dayData.findIndex(item => {
     const itemHour = new Date(item.time).getHours();
     return itemHour >= currentHour;
   });
 
-  // Get the next 8 hours from current hour
+
+  // Get the next 8 hours from current hour. It starts at 0(startIndex) and ends at 8 which is 0(startIndex) + 8 (HOURS_TO_DISPLAY).
   const startIndex = currentIndex >= 0 ? currentIndex : 0;
   const nextEightHours = dayData.slice(
     startIndex,
     startIndex + HOURS_TO_DISPLAY
   );
   nextEightHours.forEach(forecast => {
+    // If forecast.temperature is valid(not undefined and null), tempCelsius should be assigned forecast.temperature else 0;
     const tempCelsius =
       forecast.temperature !== undefined && forecast.temperature !== null
         ? forecast.temperature
         : 0;
+    // Checks for the state of the switch button/isImperial. If it is switched to metric, 
+    // the value should be converted to fahrenheit else the value should be displayed.
     const displayTempValue = state.isImperial
       ? convertCelsiusToFahrenheit(tempCelsius)
       : tempCelsius;
     const roundedValue = Math.round(displayTempValue);
-
+    // This converts the forecast.time to a string (2025-12-05T15:00) and substring(11. 16) extracts 15:00
     const timeString =
       String(forecast.time).substring(11, 16) || String(forecast.time);
     const hour24 = parseInt(timeString.split(':')[0], 10) || 0;
@@ -438,11 +446,12 @@ export const renderHourlyForecast = dayData => {
     const hour12 = hour24 % 12 || 12;
     const displayTime = `${hour12} ${ampm}`;
 
+    // Assigns the corresponding weather icon using the weaher code retrieved.
     const hourlyWeatherCode = forecast.weathercode;
     const { src: hourlyIconSrc, alt: hourlyIconAlt } =
       getWeatherIcon(hourlyWeatherCode);
 
-    // include a small dropdown toggle per hourly item (delegated handler will manage it)
+    // Include a small dropdown toggle per hourly item (delegated handler will manage it)
     const li = document.createElement('li');
     li.className = 'forecast-item';
 
@@ -460,38 +469,72 @@ export const renderHourlyForecast = dayData => {
   });
 };
 
+// This function dynamically adds the hourly forecast section.
 export const populateDaySelect = dailyData => {
+
   ensureDaySelectElements();
-  const dl = document.getElementById('day-list');
-  const sd = document.querySelector('.select-display');
-  if (!dl || !sd || !dailyData) return;
+  const dayList = document.getElementById('day-list');
+  const selectDisplay = document.querySelector('.select-display');
+  if (!dayList || !selectDisplay || !dailyData) return;
+
+  // The keys are 2025-12-05 from the dailyData(they're on the left hand side).
   const dayKeys = Object.keys(dailyData);
+
+  // //////////////////////
+  // Checks if the dayKeys are valid and not empty or zero.
   if (dayKeys.length === 0) {
-    dl.innerHTML = '';
-    sd.textContent = 'Today';
+    dayList.innerHTML = '';
+    selectDisplay.textContent = 'Today';
     return;
   }
-  dl.innerHTML = '';
+  /////////////////////////////////
 
+  dayList.innerHTML = '';
+
+  // This extracts the time value of the very first data point(the first hour of the first day)
+  // from the entire dailyData structure. The first time of each day starts at 00:00, so that is what dailyData[dayKeys[0]][0] 
+  // accesses and then getDayName converts it to a real day, then the weather imformation of each day starts at 12AM(00:00).
   const firstDayTime = dailyData[dayKeys[0]][0]?.time;
   const firstDayName = getDayName(firstDayTime, true);
-  sd.textContent = firstDayName;
+  selectDisplay.textContent = firstDayName;
+  const img = document.createElement('img');
+  img.src = '/assets/images/icon-dropdown.svg';
+  img.className = 'dropdown-icon';
+  selectDisplay.appendChild(img);
 
   dayKeys.forEach((datekey, index) => {
+
+    // If dailyData and the datekey at the first position exists, 
+    // the time should be extracted and be assigned to dayTime.
     const dayTime = dailyData[datekey][0]?.time || datekey;
+    // /////////////////////////
+
+    // This helps to convert the value stored in dayTime to a real day name and also in full.
     const dayNameFull = getDayName(dayTime, true);
+    // //////////////////////
+    console.log(index)
+
+    // At the first position, a list element should be created and assigned the id "selected-day" to it.
     const isSelected = index === 0;
     const li = document.createElement('li');
     li.className = 'custom-option-selected';
     if (isSelected) {
       li.id = 'selected-day';
     }
+    // //////////////////////////////////////
+
     li.setAttribute('role', 'option');
     li.setAttribute('aria-selected', String(isSelected));
     li.setAttribute('data-value', datekey);
     li.setAttribute('aria-labelledby', dayNameFull.toLowerCase());
+
+    // The list element should have a textcontent of the day's full name that we created earlier on (const dayNameFull = getDayName(dayTime, true);
     li.textContent = dayNameFull;
-    dl.appendChild(li);
+    // //////////////////////////
+
+    // Now append the newly created list to its parent container.
+    dayList.appendChild(li);
+    // ////////////////////////////////
   });
 };
 
@@ -507,6 +550,9 @@ export const ensureDaySelectElements = function () {
     btn.className = 'select-display';
     btn.setAttribute('aria-expanded', 'false');
     btn.textContent = 'Today';
+    const img = document.createElement('img');
+    img.src = '/assets/images/icon-dropdown.svg';
+    btn.appendChild(img)
     wrapper.appendChild(btn);
   }
   // create day list if missing
@@ -518,6 +564,8 @@ export const ensureDaySelectElements = function () {
     wrapper.appendChild(ul);
   }
 };
+
+// This function clears the icon-checkmark where and when necessary.
 export const clearAllCheckmarks = function () {
   const allChecks = document.querySelectorAll(
     '.dropdown-content .icon-checkmark'
@@ -526,6 +574,7 @@ export const clearAllCheckmarks = function () {
     check.style.visibility = 'hidden';
   });
 };
+
 export const updateAllUnitCheckmarks = function () {
   // show/hide checkmarks based on isImperial and current units
   const cMark = document.querySelector('[data-unit="celsius"] .icon-checkmark');
@@ -549,6 +598,7 @@ export const updateAllUnitCheckmarks = function () {
     inMark.style.visibility =
       state.currentPrecipUnit === 'inches' ? 'visible' : 'hidden';
 };
+
 export const showSkeletonLoading = function () {
   // Announce loading to screen readers
   const loadingStatus = document.getElementById('loading-status');

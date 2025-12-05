@@ -51,7 +51,7 @@ export const getWeatherIcon = (weatherCode) => {
     case 99:
       return { src: "/assets/images/icon-storm.webp", alt: "Storm Icon" }
 
-    // Default (or any cose not explicitly handled)
+    // Default (or any case not explicitly handled)
     default:
       return { src: "/assets/images/icon-overcast.webp", alt: "Sunny Icon" }
 
