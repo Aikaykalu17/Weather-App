@@ -392,7 +392,7 @@ h2 {
     color: var(--white-text-color);
     font-family: 'Bricolage Grotesque', sans-serif;
     font-size: 1.14rem;
-    max-width: 90%;
+    max-width: 92%;
 }
 
 .current-date {
@@ -813,6 +813,16 @@ h3 {
 /* //////////////////////////////////////////////////////// */
 
 /* Styling for shimmer effects/skeletal loading */
+@keyframes shimmer {
+    0% {
+        background-position: -63rem 0;
+    }
+
+    100% {
+        background-position: 63rem 0;
+    }
+}
+
 .skeleton-container {
     display: none;
     width: 90%;
@@ -925,25 +935,17 @@ h3 {
 
 .sr-only {
     position: absolute;
-    width: 1px;
-    height: 1px;
+    width: 0.1rem;
+    height: 0.1rem;
     padding: 0;
-    margin: -1px;
+    margin: -0.1rem;
     overflow: hidden;
     clip-path: inset(50%);
-    white-space: no-wrap;
     border-width: 0;
 }
 
-@keyframes shimmer {
-    0% {
-        background-position: -63rem 0;
-    }
+/* ////////////////////////////////////////////////////////////// */
 
-    100% {
-        background-position: 63rem 0;
-    }
-}
 
 /* Styling for the retry and loading svgs to rotate 360deg */
 @keyframes spin {
@@ -959,7 +961,109 @@ h3 {
 
 /* ////////////////////////////////////////////////// */
 
+/* Styling to make elements animate from left and right */
+@keyframes slideInLeft {
+    from {
+        transform: translateX(-100vw);
+        opacity: 0;
+    }
 
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100vw);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.weather-current-details h2,
+.weather-current-details p,
+.weather-current-details div {
+    opacity: 0;
+}
+
+.metrics-grid dt,
+.metrics-grid dd {
+    opacity: 0;
+}
+
+.metrics-grid div {
+    opacity: 1;
+    animation: none;
+}
+
+.metric-one dt {
+    animation: slideInLeft 1.5s ease-out forwards;
+    animation-delay: 0.9s;
+}
+
+.metric-one dd {
+    animation: slideInRight 1.5s ease-out forwards;
+    animation-delay: 1.1s;
+}
+
+.metric-two dt {
+    animation: slideInLeft 1.5s ease-out forwards;
+    animation-delay: 1.3s;
+}
+
+.metric-two dd {
+    animation: slideInRight 1.5s ease-out forwards;
+    animation-delay: 1.5s;
+}
+
+.metric-three dt {
+    animation: slideInRight 1.5s ease-out forwards;
+    animation-delay: 1.5s;
+}
+
+.metric-three dd {
+    animation: slideInRight 1.5s ease-out forwards;
+    animation-delay: 1.5s;
+}
+
+.metric-four dt {
+    animation: slideInLeft 1.5s ease-out forwards;
+    animation-delay: 1.5s;
+}
+
+.metric-four dd {
+    animation: slideInRight 1.5s ease-out forwards;
+    animation-delay: 1.5s;
+}
+
+.city-name {
+    animation: slideInLeft 1.5s ease-out forwards;
+    animation-delay: 0s;
+}
+
+.current-date {
+    animation: slideInRight 1.5s ease-out forwards;
+    animation-delay: 0.3s;
+}
+
+.current-temp-display {
+    animation: slideInLeft 1.5s ease-out forwards;
+    animation-delay: 0.6s;
+}
+
+.current-temp-display .temp-value {
+    animation: slideInLeft 1.5s ease-out forwards;
+    animation-delay: 0.6s;
+}
+
+
+/* ////////////////////////////////////////////////////// */
 
 /* Reveal sections on scroll */
 .section {
@@ -990,7 +1094,7 @@ h3 {
 /* ///////////////////////////////////////////////// */
 
 @media (min-width: 44rem) {
-    
+
     .skeleton-container {
         display: none;
         width: 90%;

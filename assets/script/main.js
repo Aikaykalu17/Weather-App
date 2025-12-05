@@ -28,7 +28,7 @@ const revealSection = function (entries, observer) {
 };
 const sectionObserver = new IntersectionObserver(revealSection, {
   root: null,
-  threshold: 0.0,
+  threshold: 0.1,
 });
 sections.forEach(function (section) {
   sectionObserver.observe(section);
@@ -341,6 +341,7 @@ document.addEventListener('DOMContentLoaded', () => {
       hideError();
 
       const coordinates = await getCoordinates(placeName);
+      console.log(coordinates)
       if (coordinates) {
         progressBar.classList.add('progress-active');
         startSpinner();

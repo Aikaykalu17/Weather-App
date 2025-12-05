@@ -512,7 +512,7 @@ export const populateDaySelect = dailyData => {
     // This helps to convert the value stored in dayTime to a real day name and also in full.
     const dayNameFull = getDayName(dayTime, true);
     // //////////////////////
-    console.log(index)
+  
 
     // At the first position, a list element should be created and assigned the id "selected-day" to it.
     const isSelected = index === 0;
@@ -575,8 +575,9 @@ export const clearAllCheckmarks = function () {
   });
 };
 
+  // Show/hide checkmarks based on isImperial and current units.
 export const updateAllUnitCheckmarks = function () {
-  // show/hide checkmarks based on isImperial and current units
+
   const cMark = document.querySelector('[data-unit="celsius"] .icon-checkmark');
   const fMark = document.querySelector('[data-unit="fahrenheit"] .icon-checkmark');
 
@@ -656,6 +657,7 @@ export const hideSkeletonLoading = function () {
   if (hourlyForecast) hourlyForecast.style.display = 'flex';
   if (footer) footer.style.display = 'block';
 };
+
 export const updateDisplayUnits = function (type, unit) {
   // temperature: unit = 'C' or 'F'
   if (type === 'temperature') {
@@ -709,14 +711,18 @@ export const showError = function (message = null, context = null) {
   const mainContent = document.querySelector('main');
   const btn = document.querySelector('.error-btn');
 
+  // Safety check. If .error-section is missing from the DOM, it should return(stop execution).
   if (!errorSection) {
     console.warn('showError: .error-section not found in DOM');
     return;
   }
+// //////////////////////////////////////////////
 
-  // store context for retry (e.g. { coords } or { placeName })
+  // Store context for retry (e.g. { coords } or { placeName })
   state.lastErrorContext = context || null;
 
+  // This gets the error message in the DOM and sets the error message to a 
+  // customised error message by any function calling it or the default error message in the DOM.
   const msgEl = errorSection.querySelector('.error-message');
   if (msgEl) {
     msgEl.textContent =
@@ -736,12 +742,12 @@ export const showError = function (message = null, context = null) {
     });
   }
 
-  // reveal the error panel using the project's class name
+  // Reveal the error panel using the project's class name
   errorSection.classList.add('error-active');
   errorSection.setAttribute('aria-hidden', 'false');
   errorSection.setAttribute('role', 'alert');
 
-  // ensure retry button enabled & focused for accessibility
+  // Ensure retry button enabled & focused for accessibility
   if (btn) {
     btn.removeAttribute('disabled');
     try {
@@ -775,7 +781,7 @@ export const hideError = function () {
   // Re-enable scrolling
   document.body.style.overflow = '';
 
-  // return focus to a sensible control
+  // Return focus to a sensible control
   if (searchInput) {
     try {
       searchInput.focus({ preventScroll: true });
@@ -786,6 +792,6 @@ export const hideError = function () {
     } catch (_) { }
   }
 
-  // clear stored context when error dismissed
+  // Clear stored context when error dismissed
   state.lastErrorContext = null;
 };
