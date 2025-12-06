@@ -328,7 +328,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const group = option.closest('[role="radiogroup"]') || option.parentElement;
       const options = Array.from(group.querySelectorAll('.unit-option'));
       const idx = options.indexOf(option);
-      console.log(idx)
+     
       if (key === 'Enter' || key === ' ') {
         e.preventDefault();
         selectUnitOption(option);
