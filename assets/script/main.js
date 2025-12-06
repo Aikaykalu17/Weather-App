@@ -249,7 +249,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Unit options: click + keyboard behavior (radio semantics)
   const unitOptions = document.querySelectorAll('.dropdown-content .unit-option');
 
-  const selectUnitOption =   function (option) {
+  const selectUnitOption = function (option) {
     // Gets the corresponding attribute from the DOM.
     const unitType = option.getAttribute('data-unit');
 
@@ -293,7 +293,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Update displayed units using the canonical, official, and standard state keys.
     // After making selections on the dropdown content, we  need to call the updateDisplayUnits function. Depending on the type of unit,
-    // the corresponding global variable should be updated
+    // the corresponding global variable should be updated.
     updateDisplayUnits('temperature', state.currentTempUnit);
     updateDisplayUnits('wind', state.currentWindUnit === 'mph' ? 'mph' : 'kmh');
     updateDisplayUnits('precipitation', state.currentPrecipUnit === 'inches' ? 'inches' : 'mm');
@@ -310,6 +310,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   unitOptions.forEach(option => {
+    
     // Ensure ARIA role + initial tabindex are present
     option.setAttribute('role', 'radio');
     option.setAttribute('tabindex', option.getAttribute('aria-checked') === 'true' ? '0' : '-1');
@@ -327,7 +328,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const group = option.closest('[role="radiogroup"]') || option.parentElement;
       const options = Array.from(group.querySelectorAll('.unit-option'));
       const idx = options.indexOf(option);
-
+      console.log(idx)
       if (key === 'Enter' || key === ' ') {
         e.preventDefault();
         selectUnitOption(option);
