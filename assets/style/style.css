@@ -72,6 +72,7 @@ body {
     height: 100%;
     gap: 1rem;
     overflow-x: hidden;
+    overflow-x: hidden;
 }
 
 /* Styling for skip link. Helps screen readers to skip to the main content */
