@@ -65,7 +65,7 @@ export const reverseGeocodeCoordinates = async function (lat, lon) {
   if (!isLocalhost) {
     try {
       const geocodeResponse = await fetch(
-        `https://geocoding-api.open-meteo.com/v1/reverse?latitude=${lat}&longitude=${lon}&count=1`
+        `https://geocoding-api.open-meteo.com/v1/reverse?latitude=${lat}&longitude=${lon}`
       ).catch(() => null);
       if (geocodeResponse?.ok) {
         const data = await geocodeResponse.json();
