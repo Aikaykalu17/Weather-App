@@ -52,7 +52,7 @@ export const renderDailyForecast = function (weatherData) {
       // if isImperial is metric, it just rounds the basemax.
       const displayMax =
         baseMax !== null && baseMax !== undefined
-          ? state.isImperial
+          ? state.currentTempUnit === 'F'
             ? Math.round(convertCelsiusToFahrenheit(baseMax))
             : Math.round(baseMax)
           : '-';
@@ -62,7 +62,7 @@ export const renderDailyForecast = function (weatherData) {
       // if isImperial is metric, it just rounds the basemin.
       const displayMin =
         baseMin !== null && baseMin !== undefined
-          ? state.isImperial
+          ? state.currentTempUnit === 'F'
             ? Math.round(convertCelsiusToFahrenheit(baseMin))
             : Math.round(baseMin)
           : '-';
@@ -121,11 +121,11 @@ export const renderDailyForecast = function (weatherData) {
             : '-';
         const displayMin =
           baseMin !== null
-            ? isImperial
+            ? state.currentTempUnit === 'F'
               ? Math.round(convertCelsiusToFahrenheit(baseMin))
               : Math.round(baseMin)
             : '-';
-        const unit = isImperial ? '°F' : '°C';
+        const unit = state.currentTempUnit === 'F' ? '°F' : '°C';
         const dayName = getDayName(date);
 
         const dailyItemHTML = `
@@ -175,31 +175,29 @@ export const updateMainDisplay = function (coords, weatherData) {
   // Checks the state of the isImperial and updates the UI accordingly.
   // If isImperial/switch button is switched to metric, the values should be converted to fahrenheit else, the normal figures should be displayed.
   const currentTemperature = weatherData.current_weather.temperature;
-  const displayTemp = state.isImperial
+  // Use the user's selected temperature unit (may be independent from isImperial)
+  const displayTemp = state.currentTempUnit === 'F'
     ? convertCelsiusToFahrenheit(currentTemperature)
     : currentTemperature;
 
   const mainTempEl = document.querySelector('.temp-number');
   if (mainTempEl) {
     mainTempEl.setAttribute('data-celsius', String(currentTemperature));
-    mainTempEl.textContent = `${Math.round(displayTemp)}°${state.isImperial ? 'F' : 'C'
-      }`;
+    mainTempEl.textContent = `${Math.round(displayTemp)}°${state.currentTempUnit}`;
   }
 
   const unitSymbolEl = document.querySelector('.temp-unit-symbol');
-  if (unitSymbolEl) unitSymbolEl.textContent = `°${state.isImperial ? 'F' : 'C'}`;
+  if (unitSymbolEl) unitSymbolEl.textContent = `°${state.currentTempUnit}`;
 
   // Feels like
   const feelsLikeTemp = weatherData.hourly?.apparent_temperature?.[0] ?? null;
   const feelsLikeDisplay = document.querySelector('.feels-like');
   if (feelsLikeDisplay) {
-    const v =
-      feelsLikeTemp !== null && state.isImperial
-        ? convertCelsiusToFahrenheit(feelsLikeTemp)
-        : feelsLikeTemp;
+    const v = feelsLikeTemp !== null && state.currentTempUnit === 'F'
+      ? convertCelsiusToFahrenheit(feelsLikeTemp)
+      : feelsLikeTemp;
     if (v !== null && v !== undefined)
-      feelsLikeDisplay.textContent = `${Math.round(v)}°${state.isImperial ? 'F' : 'C'
-        }`;
+      feelsLikeDisplay.textContent = `${Math.round(v)}°${state.currentTempUnit}`;
   }
 
   // Humidity
@@ -214,9 +212,13 @@ export const updateMainDisplay = function (coords, weatherData) {
   const windDisplay = document.querySelector('.wind');
   if (windDisplay) {
     windDisplay.setAttribute('data-kmh', String(windSpeed));
-    windDisplay.textContent = state.isImperial
-      ? `${convertKmToMph(windSpeed).toFixed(1)} mph`
-      : `${windSpeed.toFixed(1)} km/h`;
+
+    // Respect the user's selected wind unit (separate from the global isImperial flag)
+    const windUnit = state.currentWindUnit === 'mph' ? 'mph' : 'kmh';
+    windDisplay.textContent =
+      windUnit === 'mph'
+        ? `${convertKmToMph(windSpeed).toFixed(1)} mph`
+        : `${windSpeed.toFixed(1)} km/h`;
   }
 
   // Precipitation
@@ -279,10 +281,8 @@ export const updateMainSummary = function (dailySummaryData) {
   if (currentTempEl) {
     if (maxTemp !== null && maxTemp !== undefined) {
       currentTempEl.setAttribute('data-celsius', String(maxTemp));
-      const out = state.isImperial ? convertCelsiusToFahrenheit(maxTemp) : maxTemp;
-      currentTempEl.textContent = state.isImperial
-        ? `${Math.round(out)}°F`
-        : `${Math.round(out)}°C`;
+      const out = state.currentTempUnit === 'F' ? convertCelsiusToFahrenheit(maxTemp) : maxTemp;
+      currentTempEl.textContent = `${Math.round(out)}°${state.currentTempUnit}`;
     } else {
       currentTempEl.removeAttribute('data-celsius');
       currentTempEl.textContent = '-';
@@ -292,7 +292,7 @@ export const updateMainSummary = function (dailySummaryData) {
   if (highTempEl) {
     if (maxTemp !== null && maxTemp !== undefined) {
       highTempEl.setAttribute('data-celsius', String(maxTemp));
-      const out = state.isImperial ? convertCelsiusToFahrenheit(maxTemp) : maxTemp;
+      const out = state.currentTempUnit === 'F' ? convertCelsiusToFahrenheit(maxTemp) : maxTemp;
       highTempEl.textContent = Math.round(out);
     } else {
       highTempEl.removeAttribute('data-celsius');
@@ -303,7 +303,7 @@ export const updateMainSummary = function (dailySummaryData) {
   if (lowTempEl) {
     if (minTemp !== null && minTemp !== undefined) {
       lowTempEl.setAttribute('data-celsius', String(minTemp));
-      const out = state.isImperial ? convertCelsiusToFahrenheit(minTemp) : minTemp;
+      const out = state.currentTempUnit === 'F' ? convertCelsiusToFahrenheit(minTemp) : minTemp;
       lowTempEl.textContent = Math.round(out);
     } else {
       lowTempEl.removeAttribute('data-celsius');
@@ -313,7 +313,7 @@ export const updateMainSummary = function (dailySummaryData) {
 
   document
     .querySelectorAll('.temp-unit-symbol')
-    .forEach(s => (s.textContent = `°${state.isImperial ? 'F' : 'C'}`));
+    .forEach(s => (s.textContent = `°${state.currentTempUnit}`));
 };
 
 /* ---------- Handle day selection ---------- */
@@ -434,7 +434,7 @@ export const renderHourlyForecast = dayData => {
         : 0;
     // Checks for the state of the switch button/isImperial. If it is switched to metric, 
     // the value should be converted to fahrenheit else the value should be displayed.
-    const displayTempValue = state.isImperial
+    const displayTempValue = state.currentTempUnit === 'F'
       ? convertCelsiusToFahrenheit(tempCelsius)
       : tempCelsius;
     const roundedValue = Math.round(displayTempValue);
@@ -462,7 +462,7 @@ export const renderHourlyForecast = dayData => {
       </div>
       <div class="temp-block">
         <span class="temp-number-hourly" data-celsius="${tempCelsius}">${roundedValue}</span>
-        <span class="temp-unit-symbol-hourly">°${state.isImperial ? 'F' : 'C'}</span>
+        <span class="temp-unit-symbol-hourly">°${state.currentTempUnit}</span>
       </div>
     `;
     hourlyListContainer.appendChild(li);
@@ -500,6 +500,7 @@ export const populateDaySelect = dailyData => {
   const img = document.createElement('img');
   img.src = '/assets/images/icon-dropdown.svg';
   img.className = 'dropdown-icon';
+  img.alt = 'Drop down Icon'
   selectDisplay.appendChild(img);
 
   dayKeys.forEach((datekey, index) => {
@@ -567,6 +568,7 @@ export const ensureDaySelectElements = function () {
 
 // This function clears the icon-checkmark where and when necessary.
 export const clearAllCheckmarks = function () {
+  // Focuses on the dropdown content and not the select display.
   const allChecks = document.querySelectorAll(
     '.dropdown-content .icon-checkmark'
   );
@@ -664,16 +666,16 @@ export const updateDisplayUnits = function (type, unit) {
     document.querySelectorAll('[data-celsius]').forEach(el => {
       const base = parseFloat(el.getAttribute('data-celsius'));
       if (Number.isNaN(base)) return;
+      // If the type of unit is fahrenheit, the base which is the celsius
+      // value should be converted to fahrenheit, 
+      // else (if the unit type is celsius), the base should be displayed
       const out = unit === 'F' ? convertCelsiusToFahrenheit(base) : base;
-      // numeric text only (templates append unit separately)
+      // Numeric text only (templates append unit separately). 
+      // If the unit type is fahrenheit(F), all elements with the data-celsius should be updated 
+      // with the celsius that's been converted to fahrenheit.
       el.textContent = Math.round(out);
     });
-    document
-      .querySelectorAll('.temp-unit-symbol')
-      .forEach(s => (s.textContent = `°${unit}`));
-    document
-      .querySelectorAll('.temp-unit-symbol-hourly')
-      .forEach(s => (s.textContent = `°${unit}`));
+  
     return;
   }
 

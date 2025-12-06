@@ -13,6 +13,7 @@
 </head>
 
 <body>
+    <a class="skip-link" tabindex="0" href="#main">Skip to content</a>
   <!-- Screen reader loading announcement -->
   <div class="sr-only" role="status" aria-live="polite" aria-atomic="true" id="loading-status">
     Loading weather data
@@ -78,27 +79,27 @@
   <header class="header">
     <div class="header-components">
       <div class="header-logo">
-        <img src="/assets/images/logo.svg" alt="logo" class="logo-svg" />
+        <img src="/assets/images/logo.svg" alt="Weather App logo" class="logo-svg" />
       </div>
-      <div class="btn-unit">
+      <div class="btn-unit" role="button">
         <div class="menu-header">
-          <img src="/assets/images/icon-units.svg" alt="" aria-label="Units Settings" />
+          <img src="/assets/images/icon-units.svg" alt="Settings svg" class="settings-icon"/>
           <span class="menu-header-span">Units</span>
-          <img src="/assets/images/icon-dropdown.svg" alt="Dropdown svg" aria-label="Dropdown Icon"
+          <img src="/assets/images/icon-dropdown.svg" alt="Dropdown svg"
             class="icon-dropdown" />
         </div>
         <div class="dropdown-content" id="dropdown-content">
           <button class="switch-button">Switch to Imperial</button>
-          <div class="unit-group" data-unit-type="temperature" role="radiogroup" aria-labelledby="temp-label">
+          <div class="unit-group" data-unit-type="temperature" role="radiogroup" id="temp-label" aria-labelledby="temp-label">
             <div class="group-label">Temperature</div>
             <div class="unit-option" role="radio" aria-checked="true" tabindex="0" data-unit="celsius">
               Celsius(°C)
-              <img src="/assets/images/icon-checkmark.svg" alt="icon-checkmark" aria-label="icon-checkmark"
+              <img src="/assets/images/icon-checkmark.svg" alt="icon-checkmark"
                 class="icon-checkmark" aria-hidden="true" />
             </div>
             <div class="unit-option" role="radio" aria-checked="false" tabindex="0" data-unit="fahrenheit">
               Fahrenheit(°F)
-              <img src="/assets/images/icon-checkmark.svg" alt="icon-checkmark" aria-label="icon-checkmark"
+              <img src="/assets/images/icon-checkmark.svg" alt="icon-checkmark"
                 aria-checked="false" class="icon-checkmark" aria-hidden="true" />
             </div>
           </div>
@@ -106,12 +107,12 @@
             <div class="group-label" id="wind-label">Wind Speed</div>
             <div class="unit-option" role="radio" aria-checked="true" tabindex="0" data-unit="kmh">
               km/h
-              <img src="/assets/images/icon-checkmark.svg" alt="icon-checkmark" aria-label="icon-checkmark"
+              <img src="/assets/images/icon-checkmark.svg" alt="icon-checkmark"
                 class="icon-checkmark" aria-hidden="true" />
             </div>
             <div class="unit-option" role="radio" aria-checked="false" tabindex="0" data-unit="mph">
               mph
-              <img src="/assets/images/icon-checkmark.svg" alt="icon-checkmark" aria-label="icon-checkmark"
+              <img src="/assets/images/icon-checkmark.svg" alt="icon-checkmark"
                 class="icon-checkmark" aria-hidden="true" />
             </div>
           </div>
@@ -119,12 +120,12 @@
             <div class="group-label" id="precip-label">Precipitation</div>
             <div class="unit-option" role="radio" aria-checked="true" tabindex="0" data-unit="mm">
               Millimeters (mm)
-              <img src="/assets/images/icon-checkmark.svg" alt="icon-checkmark" aria-label="icon-checkmark"
+              <img src="/assets/images/icon-checkmark.svg" alt="icon-checkmark" 
                 class="icon-checkmark" aria-hidden="true" />
             </div>
             <div class="unit-option" role="radio" aria-checked="false" tabindex="0" data-unit="inches">
               Inches (In)
-              <img src="/assets/images/icon-checkmark.svg" alt="icon-checkmark" aria-label="icon-checkmark"
+              <img src="/assets/images/icon-checkmark.svg" alt="icon-checkmark"
                 class="icon-checkmark" aria-hidden="true" />
             </div>
           </div>
@@ -145,6 +146,7 @@
             <img src="/assets/images/icon-loading.svg" alt="Progress Icon" class="icon-loading">
             <span class="progress-span">Search in progress</span>
           </div>
+          <label class="sr-only" for="search-place">Search for a place</label>
           <input type="search" name="search-place" id="search-place" placeholder="Search for a place...."
             class="search-place" />
         </div>
@@ -162,10 +164,10 @@
           <time datetime="2025-08-05" id="weather-date" class="weather-date">Tuesday, Aug 5, 2025</time>
         </p>
         <div class="current-temp-display">
-          <img src="/assets/images/icon-sunny.webp" alt="Sun" class="sun-svg" aria-label="Sun" />
+          <img src="/assets/images/icon-sunny.webp" alt="Sun Icon" class="sun-svg"/>
 
           <div class="temp-value">
-            <span class="temp-number" data-celsius="20">20</span </div>
+            <span class="temp-number" data-celsius="20">20</span>
           </div>
         </div>
     </section>
@@ -197,8 +199,8 @@
         <div class="forecast-day-item">
           <dt>Tue</dt>
           <dd>
-            <img src="/assets/images/icon-rain.webp" alt="Light rain" class="rain-svg grid-svg"
-              aria-label="Rain Icon" />
+            <img src="/assets/images/icon-rain.webp" alt="Light rain icon" class="rain-svg grid-svg"
+              />
             <div class="span-temp-container">
               <span class="high-temp temp-value" data-celsius="20">20°</span>
               <span class="low-temp temp-value" data-celsius="14">14°</span>
@@ -208,8 +210,8 @@
         <div class="forecast-day-item">
           <dt>Wed</dt>
           <dd>
-            <img src="/assets/images/icon-drizzle.webp" alt="Drizzle" class="drizzle-svg grid-svg"
-              aria-label="Drizzle Icon" />
+            <img src="/assets/images/icon-drizzle.webp" alt="Drizzle Icon" class="drizzle-svg grid-svg"
+              />
             <div class="span-temp-container">
               <span class="high-temp temp-value" data-celsius="21">21°</span>
               <span class="low-temp temp-value" data-celsius="15">15°</span>
@@ -219,8 +221,8 @@
         <div class="forecast-day-item">
           <dt>Thu</dt>
           <dd>
-            <img src="/assets/images/icon-sunny.webp" alt="Bright Sun" class="icon-sunny grid-svg"
-              aria-label="Sun Icon" />
+            <img src="/assets/images/icon-sunny.webp" alt="Bright sun Icon" class="icon-sunny grid-svg"
+              />
             <div class="span-temp-container">
               <span class="high-temp temp-value" data-celsius="20">20°</span>
               <span class="low-temp temp-value" data-celsius="14">14°</span>
@@ -230,8 +232,8 @@
         <div class="forecast-day-item">
           <dt>Fri</dt>
           <dd>
-            <img src="/assets/images/icon-partly-cloudy.webp" alt="Partly cloudly with sun" class="cloud-svg grid-svg"
-              aria-label="Cloud Icon" />
+            <img src="/assets/images/icon-partly-cloudy.webp" alt="Partly cloudly with sun icon" class="cloud-svg grid-svg"
+              />
             <div class="span-temp-container">
               <span class="high-temp temp-value" data-celsius="25">25°</span>
               <span class="low-temp temp-value" data-celsius="13">13°</span>
@@ -241,7 +243,7 @@
         <div class="forecast-day-item">
           <dt>Sat</dt>
           <dd>
-            <img src="/assets/images/icon-storm.webp" alt="Storm" class="storm-svg grid-svg" aria-label="Storm Icon" />
+            <img src="/assets/images/icon-storm.webp" alt="Storm" class="storm-svg grid-svg"/>
             <div class="span-temp-container">
               <span class="high-temp temp-value" data-celsius="21">21°</span>
               <span class="low-temp temp-value" data-celsius="15">15°</span>
@@ -251,7 +253,7 @@
         <div class="forecast-day-item">
           <dt>Sun</dt>
           <dd>
-            <img src="/assets/images/icon-snow.webp" alt="Snow" class="snow-icon grid-svg" aria-label="Snow Icon" />
+            <img src="/assets/images/icon-snow.webp" alt="Snow Icon" class="snow-icon grid-svg" />
             <div class="span-temp-container">
               <span class="high-temp temp-value" data-celsius="25">25°</span>
               <span class="low-temp temp-value" data-celsius="16">16°</span>
@@ -261,7 +263,7 @@
         <div class="forecast-day-item">
           <dt>Mon</dt>
           <dd>
-            <img src="/assets/images/icon-fog.webp" alt="Fog" class="fog-svg grid-svg" aria-label="Fog Icon" />
+            <img src="/assets/images/icon-fog.webp" alt="Fog Icon" class="fog-svg grid-svg"/>
             <div class="span-temp-container">
               <span class="high-temp temp-value" data-celsius="20">20°</span>
               <span class="low-temp temp-value" data-celsius="14">14°</span>
@@ -278,33 +280,32 @@
           <div class="custom-select">
             <button class="select-display" tabindex="0" aria-expanded="false" aria-controls="day-list">
               Today
-              <img src="/assets/images/icon-dropdown.svg" alt="Dropdown svg" aria-label="Dropdown Icon"
-                class="icon-dropdown" />
+              <img src="/assets/images/icon-dropdown.svg" alt="Dropdown Icon" class="icon-dropdown" />
             </button>
             <ul class="select-options-list" id="day-list" role="listbox" aria-activedescendant="selected-day">
               <li class="custom-option-selected" id="selected-day" role="option" aria-selected="true" data-value="tue"
-                aria-labelledby="Tuesday">
+                aria-label="Tuesday">
                 Tuesday
               </li>
               <li class="custom-option-selected" role="option" aria-selected="false" data-value="wed"
-                aria-labelledby="Wednesday">
+                aria-label="Wednesday">
                 Wednesday
               </li>
               <li class="custom-option-selected" role="option" aria-selected="false" data-value="thu"
-                aria-labelledby="Thursday">
+                aria-label="Thursday">
                 Thursday
               </li>
 
               <li class="custom-option-selected" role="option" aria-selected="false" data-value="fri"
-                aria-labelledby="Friday">
+                aria-label="Friday">
                 Friday
               </li>
               <li class="custom-option-selected" role="option" aria-selected="false" data-value="sat"
-                aria-labelledby="Saturday">
+                aria-label="Saturday">
                 Saturday
               </li>
               <li class="custom-option-selected" role="option" aria-selected="false" data-value="sun"
-                aria-labelledby="Sunday">
+                aria-label="Sunday">
                 Sunday
               </li>
             </ul>
@@ -316,7 +317,7 @@
     </section>
     <section class="error-section" role="alert" aria-live="assertive" aria-hidden="true">
       <div class="error-content">
-        <img src="/assets/images/icon-error.svg" alt="" class="error-icon" aria-label="Error icon">
+        <img src="/assets/images/icon-error.svg" alt="Error Icon" class="error-icon">
         <h2 class="error-title">Oops! Something went wrong.</h2>
         <p class="error-message">
           We couldn't connect to the server(API Error). Please try again in a few moments</p>
@@ -329,7 +330,7 @@
     Challenge by
     <a href="https://www.frontendmentor.io?ref=challenge">Frontend Mentor</a>
     <br />
-    Coded by <a href="https;//www.github.com/Aikaykalu17">Aikay Kalu</a>
+    Coded by <a href="https://www.github.com/Aikaykalu17">Aikay Kalu</a>
   </footer>
 </body>
 

@@ -12,7 +12,7 @@ import {
 } from './view.js';
 
 
-import { city, state } from './state.js';
+import { state } from './state.js';
 import { convertHourlyDataToObjects } from './helpers.js';
 
 
@@ -198,6 +198,7 @@ export const getAndDisplayWeather = async function (coords) {
     state.globalCoords = coords;
     state.globalWeatherData = weatherData;
 
+    
     updateMainDisplay(coords, weatherData);
     renderDailyForecast(weatherData);
 
