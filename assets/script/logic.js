@@ -16,22 +16,8 @@ import { state } from './state.js';
 import { convertHourlyDataToObjects } from './helpers.js';
 
 
-/* ---------- Fetch helpers ---------- */
-export const fetchData = async function (url) {
-  try {
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`Fetch failed: ${response.status}`);
-    }
-    return await response.json();
-  } catch (error) {
-    showError('Network request failed. Please check connectivity.', null);
-    console.error(error);
-    return null;
-  }
-};
 
-// When a search is made, this fucntion tries to get the coordinates of the city searched for.
+// When a search is made, this function tries to get the coordinates of the city searched for.
 export const getCoordinates = async function (placeName) {
   const geocodingURL = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(
     placeName

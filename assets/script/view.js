@@ -707,6 +707,7 @@ export const updateDisplayUnits = function (type, unit) {
     return;
   }
 };
+
 export const showError = function (message = null, context = null) {
   // Query elements at runtime to avoid stale/undefined top-level references
   const errorSection = document.querySelector('.error-section');
