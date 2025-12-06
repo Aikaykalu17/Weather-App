@@ -1,5 +1,5 @@
 :root {
-    --bg-color: hsl(243, 27%, 20%);
+    --bg-color: hsl(243, 96%, 9%);
     --white-text-color: hsl(0, 100%, 100%);
     --bright-blue: hsl(233, 67%, 56%);
     --units-bg: hsl(243, 23%, 24%);
@@ -786,7 +786,7 @@ h3 {
 
 .error-icon {
     width: 6rem;
-    height: 6rem;
+    height: 4rem;
 }
 
 .error-title {
