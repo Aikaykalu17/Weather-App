@@ -394,7 +394,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
       // This switches the textcontext of the switch button. 
-      // If it is showing "Switch to Imperial", then it should change to "switxh to Metric" when a click event happens.
+      // If it is showing "Switch to Imperial", then it should change to "Switch to Metric" when a click event happens.
       switchButton.textContent = state.isImperial
         ? 'Switch to Metric'
         : 'Switch to Imperial';
