@@ -181,6 +181,7 @@ export const getAndDisplayWeather = async function (coords) {
   // const forecastUrl = `https://api.open-meteo.com/v1/forecast?latitude=${coords.latitude}&longitude=${coords.longitude}&hourly=temperature_2m,weather_code,apparent_temperature,windspeed_10m,relative_humidity_2m&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum&timezone=${encodeURIComponent(coords.timezone || 'auto')}&current_weather=true&forecast_days=7`;
   try {
     const response = await fetch(forecastUrl);
+    console.log(response)
     if (!response.ok) {
       showError('Weather API returned an error. Please try again.', { coords });
       return;
