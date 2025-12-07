@@ -543,7 +543,8 @@ export const populateDaySelect = dailyData => {
   });
 };
 
-/* ---------- Populate day select (creates elements if missing) ---------- */
+
+// Populate day select (creates elements if missing) 
 export const ensureDaySelectElements = function () {
   const wrapper = document.querySelector('.custom-select-wrapper');
   if (!wrapper) return;
@@ -568,8 +569,8 @@ export const ensureDaySelectElements = function () {
     ul.setAttribute('role', 'listbox');
     wrapper.appendChild(ul);
   }
-  
 };
+
 
 // This function clears the icon-checkmark where and when necessary.
 export const clearAllCheckmarks = function () {
