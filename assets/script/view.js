@@ -250,17 +250,14 @@ export const updateMainDisplay = function (coords, weatherData) {
     day: 'numeric',
   };
 
+// Checks if weatherdata exists and if weatherData.timezone exists and if weatherData.timezone isequqlas to auto'
+// If yes, it should be asssgined to the timezone of options else coords.timezone after passing the test should be assigned to options.timezone.
 if (weatherData && weatherData.timezone && weatherData.timezone === 'auto') {
   options.timezone = weatherData.timezone;
 } else if (coords && coords.timezone && coords.timezone === 'auto') {
   options.timezone = coords.timezone;
 }
   const formattedDate = now.toLocaleDateString('en-US', options);
-
-
-  // if (coords && coords.timezone && coords.timezone !== 'auto')
-  //   options.timeZone = coords.timezone;
-  // const formattedDate = now.toLocaleDateString('en-US', options);
 
   if (dateElement) {
     dateElement.textContent = formattedDate;
@@ -301,7 +298,7 @@ export const updateMainSummary = function (dailySummaryData) {
     if (maxTemp !== null && maxTemp !== undefined) {
       highTempEl.setAttribute('data-celsius', String(maxTemp));
       const out = state.currentTempUnit === 'F' ? convertCelsiusToFahrenheit(maxTemp) : maxTemp;
-      highTempEl.textContent = Math.round(out);
+      highTempEl.innerHTML = `${Math.round(out)}<span class="temp-unit-symbol">°${state.currentTempUnit}</span>`;
     } else {
       highTempEl.removeAttribute('data-celsius');
       highTempEl.textContent = '-';
@@ -312,7 +309,7 @@ export const updateMainSummary = function (dailySummaryData) {
     if (minTemp !== null && minTemp !== undefined) {
       lowTempEl.setAttribute('data-celsius', String(minTemp));
       const out = state.currentTempUnit === 'F' ? convertCelsiusToFahrenheit(minTemp) : minTemp;
-      lowTempEl.textContent = Math.round(out);
+      lowTempEl.innerHTML = `${Math.round(out)}<span class="temp-unit-symbol">°${state.currentTempUnit}</span>`;
     } else {
       lowTempEl.removeAttribute('data-celsius');
       lowTempEl.textContent = '-';
@@ -341,7 +338,6 @@ export const handleDaySelection = dailyData => {
     e.stopPropagation();
 
     const selectedDateKey = selectedLi.getAttribute('data-value');
-    console.log(selectedDateKey)
     const dayArray = dailyData[selectedDateKey];
     if (!Array.isArray(dayArray) || dayArray.length === 0) {
       console.error(
@@ -572,6 +568,7 @@ export const ensureDaySelectElements = function () {
     ul.setAttribute('role', 'listbox');
     wrapper.appendChild(ul);
   }
+  
 };
 
 // This function clears the icon-checkmark where and when necessary.
@@ -716,6 +713,13 @@ export const updateDisplayUnits = function (type, unit) {
     });
     return;
   }
+
+    document
+      .querySelectorAll('.temp-unit-symbol')
+      .forEach(s => (s.textContent = `°${unit}`));
+    document
+      .querySelectorAll('.temp-unit-symbol-hourly')
+      .forEach(s => (s.textContent = `°${unit}`));
 };
 
 export const showError = function (message = null, context = null) {

@@ -95,7 +95,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // Ensure day select elements exist.
   ensureDaySelectElements();
 
-
   // Event listener on the .btn-unit, to rotate the icon dropdown by toggling the active class.
   const buttonContainer = document.querySelector('.btn-unit');
   buttonContainer.addEventListener('click', () => {

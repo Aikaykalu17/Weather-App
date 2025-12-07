@@ -55,52 +55,42 @@ export const getCoordinates = async function (placeName) {
 
 // This is the function that the navigator.geolocation calls to load the user's loaction weather information.
 export const reverseGeocodeCoordinates = async function (lat, lon) {
-  // Skip geocoding attempt when on localhost to avoid CORS errors
-  const isLocalhost =
-    window.location.hostname === 'localhost' ||
-    window.location.hostname === '127.0.0.1';
 
-  // Only try geocoding API if NOT on localhost
+  try {
+    const geocodeResponse = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=en`).catch(() => null);
 
-  if (!isLocalhost) {
-    try {
-
-
-const geocodeResponse = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=en`).catch(() => null);
-
-if (geocodeResponse?.ok) {
-  const data = await geocodeResponse.json();
-  console.log(data)
-  return {
-    latitude: lat,
-    longitude: lon,
-    cityName: data.city || data.locality || 'Local Area',
-    city: data.principalSubdivision || '',
-    country: data.countryName || 'Nigeria',
-    timezone: data.localityInfo?.informative?.[0]?.name || 'UTC',
-  };
-}
-
-      // const geocodeResponse = await fetch(
-      //   `https://geocoding-api.open-meteo.com/v1/reverse?latitude=${lat}&longitude=${lon}`
-      // ).catch(() => null);
-      // if (geocodeResponse?.ok) {
-      //   const data = await geocodeResponse.json();
-      //   if (data?.results?.[0]) {
-      //     return {
-      //       latitude: lat,
-      //       longitude: lon,
-      //       cityName: data.results[0].name || 'Local Area',
-      //       city: data.results[0].admin1 || '',
-      //       country: data.results[0].country || 'Nigeria',
-      //       timezone: data.results[0].timezone || 'UTC',
-      //     };
-      //   }
-      // }
-    } catch (e) {
-      // Silently continue to timezone fallback
+    if (geocodeResponse?.ok) {
+      const data = await geocodeResponse.json();
+      return {
+        latitude: lat,
+        longitude: lon,
+        cityName: data.city || data.locality || 'Local Area',
+        city: data.principalSubdivision || '',
+        country: data.countryName || 'Nigeria',
+        timezone: data.localityInfo?.informative?.[0]?.name || 'UTC',
+      };
     }
+
+    // const geocodeResponse = await fetch(
+    //   `https://geocoding-api.open-meteo.com/v1/reverse?latitude=${lat}&longitude=${lon}`
+    // ).catch(() => null);
+    // if (geocodeResponse?.ok) {
+    //   const data = await geocodeResponse.json();
+    //   if (data?.results?.[0]) {
+    //     return {
+    //       latitude: lat,
+    //       longitude: lon,
+    //       cityName: data.results[0].name || 'Local Area',
+    //       city: data.results[0].admin1 || '',
+    //       country: data.results[0].country || 'Nigeria',
+    //       timezone: data.results[0].timezone || 'UTC',
+    //     };
+    //   }
+    // }
+  } catch (e) {
+    // Silently continue to timezone fallback
   }
+
 
   // Fallback: use the forecast endpoint which has CORS enabled
   try {
@@ -181,7 +171,6 @@ export const getAndDisplayWeather = async function (coords) {
   // const forecastUrl = `https://api.open-meteo.com/v1/forecast?latitude=${coords.latitude}&longitude=${coords.longitude}&hourly=temperature_2m,weather_code,apparent_temperature,windspeed_10m,relative_humidity_2m&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum&timezone=${encodeURIComponent(coords.timezone || 'auto')}&current_weather=true&forecast_days=7`;
   try {
     const response = await fetch(forecastUrl);
-    console.log(response)
     if (!response.ok) {
       showError('Weather API returned an error. Please try again.', { coords });
       return;
@@ -197,7 +186,6 @@ export const getAndDisplayWeather = async function (coords) {
     //  The weatherData is the result of the data fetched fromthe forecastUrl after its being parsed.
     state.globalCoords = coords;
     state.globalWeatherData = weatherData;
-
 
     updateMainDisplay(coords, weatherData);
     renderDailyForecast(weatherData);

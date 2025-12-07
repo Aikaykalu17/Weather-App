@@ -422,7 +422,7 @@ h2 {
     color: var(--white-text-color);
     font-family: 'Bricolage Grotesque', sans-serif;
     font-size: 1.14rem;
-    max-width: 92%;
+    max-width: 95%;
 }
 
 .current-date {
@@ -995,7 +995,7 @@ h3 {
 /* Styling to make elements animate from left and right */
 @keyframes slideInLeft {
     from {
-        transform: translateX(-100vw);
+        transform: translateX(-100%);
         opacity: 0;
     }
 
@@ -1007,7 +1007,7 @@ h3 {
 
 @keyframes slideInRight {
     from {
-        transform: translateX(100vw);
+        transform: translateX(100%);
         opacity: 0;
     }
 
@@ -1096,7 +1096,7 @@ h3 {
 
 /* ////////////////////////////////////////////////////// */
 
-/* Reveal sections on scroll */
+/* Styling to reveal sections on scroll */
 .section {
     transition: transform 1s, opacity 1s;
 }
