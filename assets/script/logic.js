@@ -64,23 +64,37 @@ export const reverseGeocodeCoordinates = async function (lat, lon) {
   
   if (!isLocalhost) {
     try {
-      const geocodeResponse = await fetch(
-        `https://geocoding-api.open-meteo.com/v1/reverse?latitude=${lat}&longitude=${lon}`
-      ).catch(() => null);
-      if (geocodeResponse?.ok) {
-        const data = await geocodeResponse.json();
-        console.log(data)
-        if (data?.results?.[0]) {
-          return {
-            latitude: lat,
-            longitude: lon,
-            cityName: data.results[0].name || 'Local Area',
-            city: data.results[0].admin1 || '',
-            country: data.results[0].country || 'Nigeria',
-            timezone: data.results[0].timezone || 'UTC',
-          };
-        }
-      }
+      const geocodeResponse = await fetch(`
+  https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=en`).catch(() => null);
+
+if (geocodeResponse?.ok) {
+  const data = await geocodeResponse.json();
+  return {
+    latitude: lat,
+    longitude: lon,
+    cityName: data.city || data.locality || 'Local Area',
+    city: data.principalSubdivision || '',
+    country: data.countryName || 'Nigeria',
+    timezone: data.localityInfo?.informative?.[0]?.name || 'UTC',
+  };
+}
+      // const geocodeResponse = await fetch(
+      //   `https://geocoding-api.open-meteo.com/v1/reverse?latitude=${lat}&longitude=${lon}`
+      // ).catch(() => null);
+      // if (geocodeResponse?.ok) {
+      //   const data = await geocodeResponse.json();
+      //   console.log(data)
+      //   if (data?.results?.[0]) {
+      //     return {
+      //       latitude: lat,
+      //       longitude: lon,
+      //       cityName: data.results[0].name || 'Local Area',
+      //       city: data.results[0].admin1 || '',
+      //       country: data.results[0].country || 'Nigeria',
+      //       timezone: data.results[0].timezone || 'UTC',
+      //     };
+      //   }
+      // }
     } catch (e) {
       // Silently continue to timezone fallback
     }
