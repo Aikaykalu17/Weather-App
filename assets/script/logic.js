@@ -61,23 +61,24 @@ export const reverseGeocodeCoordinates = async function (lat, lon) {
     window.location.hostname === '127.0.0.1';
 
   // Only try geocoding API if NOT on localhost
-  
+
   if (!isLocalhost) {
     try {
-      const geocodeResponse = await fetch(`
-  https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=en`).catch(() => null);
+      const geocodeResponse = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=en`).catch(() => null);
 
-if (geocodeResponse?.ok) {
-  const data = await geocodeResponse.json();
-  return {
-    latitude: lat,
-    longitude: lon,
-    cityName: data.city || data.locality || 'Local Area',
-    city: data.principalSubdivision || '',
-    country: data.countryName || 'Nigeria',
-    timezone: data.localityInfo?.informative?.[0]?.name || 'UTC',
-  };
-}
+      if (geocodeResponse?.ok) {
+        const data = await geocodeResponse.json();
+        if (data?.city || data?.locality) {
+          return {
+            latitude: lat,
+            longitude: lon,
+            cityName: data.city || data.locality || 'Local Area',
+            city: data.principalSubdivision || '',
+            country: data.countryName || 'Nigeria',
+            timezone: data.localityInfo?.informative?.[0]?.name || 'UTC',
+          };
+        }
+      }
       // const geocodeResponse = await fetch(
       //   `https://geocoding-api.open-meteo.com/v1/reverse?latitude=${lat}&longitude=${lon}`
       // ).catch(() => null);
@@ -99,7 +100,7 @@ if (geocodeResponse?.ok) {
       // Silently continue to timezone fallback
     }
   }
-  
+
   // Fallback: use the forecast endpoint which has CORS enabled
   try {
     const tzRes = await fetch(
@@ -114,7 +115,7 @@ if (geocodeResponse?.ok) {
       return {
         latitude: lat,
         longitude: lon,
-        cityName: inferredCityName ,
+        cityName: inferredCityName,
         country: 'Nigeria', // For Nigerian coordinates, we know the country
         timezone,
       };
@@ -144,9 +145,9 @@ export const buildDailyDataFromHourly = hourly => {
     return {
       time: timeValue,
       temperature:
-      hourly.temperature_2m && hourly.temperature_2m[index] !== undefined
-      ? hourly.temperature_2m[index]
-      : hourly.temperature && hourly.temperature[index],
+        hourly.temperature_2m && hourly.temperature_2m[index] !== undefined
+          ? hourly.temperature_2m[index]
+          : hourly.temperature && hourly.temperature[index],
       weathercode: hourly.weather_code[index],
 
       // add other props if needed (weathercode, etc.)
@@ -176,7 +177,7 @@ export const getAndDisplayWeather = async function (coords) {
   state.currentDisplayCoords = coords;
 
   const forecastUrl = `https://api.open-meteo.com/v1/forecast?latitude=${coords.latitude}&longitude=${coords.longitude}&hourly=temperature_2m,weather_code,apparent_temperature,windspeed_10m,relative_humidity_2m&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum&timezone=${encodeURIComponent(coords.timezone || 'auto')}&current_weather=true&forecast_days=7`;
-
+  console.log('Forecast URL', forecastUrl)
   try {
     const response = await fetch(forecastUrl);
     if (!response.ok) {
@@ -191,11 +192,11 @@ export const getAndDisplayWeather = async function (coords) {
       console.error('Incomplete weather data received. Cannot update UI.');
       return;
     }
-  //  The weatherData is the result of the data fetched fromthe forecastUrl after its being parsed.
+    //  The weatherData is the result of the data fetched fromthe forecastUrl after its being parsed.
     state.globalCoords = coords;
     state.globalWeatherData = weatherData;
 
-    
+
     updateMainDisplay(coords, weatherData);
     renderDailyForecast(weatherData);
 
