@@ -71,9 +71,28 @@ body {
     width: 100%;
     height: 100%;
     gap: 1rem;
+    overflow-x: hidden;
 
 }
 
+.skip-link {
+  position: absolute;
+  left: -625rem;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+.skip-link:focus {
+  position: static;
+  left: auto;
+  width: auto;
+  height: auto;
+  padding: .5rem 1rem;
+  background: #000;
+  color: #fff;
+  z-index: 1000;
+}
 
 
 /* //////////////////////////////////////////// */
@@ -437,7 +456,7 @@ h2 {
 }
 
 .temp-unit-symbol {
-    font-size: 2rem;
+    font-size: 0.7rem;
     color: var(--white-text-color);
     font-family: 'Bricolage Grotesque', sans-serif;
 }

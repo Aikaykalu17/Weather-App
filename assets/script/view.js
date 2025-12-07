@@ -77,10 +77,10 @@ export const renderDailyForecast = function (weatherData) {
           <dd>
             <img src="${dailyIconSrc}" alt="${dailyIconAlt}" class="hourly-svg" aria-label="${dailyIconAlt}" />
             <div class="span-temp-container">
-              <span class="high-temp" data-celsius="${baseMax !== null && baseMax !== undefined ? baseMax : ''
-        }">${displayMax}°</span>
-              <span class="low-temp" data-celsius="${baseMin !== null && baseMin !== undefined ? baseMin : ''
-        }">${displayMin}°</span>
+                <span class="high-temp" data-celsius="${baseMax !== null && baseMax !== undefined ? baseMax : ''
+              }">${displayMax}<span class="temp-unit-symbol">°${state.currentTempUnit}</span></span>
+                <span class="low-temp" data-celsius="${baseMin !== null && baseMin !== undefined ? baseMin : ''
+              }">${displayMin}<span class="temp-unit-symbol">°${state.currentTempUnit}</span></span>
         
             </div>
             </dd>
@@ -666,16 +666,18 @@ export const updateDisplayUnits = function (type, unit) {
     document.querySelectorAll('[data-celsius]').forEach(el => {
       const base = parseFloat(el.getAttribute('data-celsius'));
       if (Number.isNaN(base)) return;
-      // If the type of unit is fahrenheit, the base which is the celsius
-      // value should be converted to fahrenheit, 
-      // else (if the unit type is celsius), the base should be displayed
       const out = unit === 'F' ? convertCelsiusToFahrenheit(base) : base;
-      // Numeric text only (templates append unit separately). 
-      // If the unit type is fahrenheit(F), all elements with the data-celsius should be updated 
-      // with the celsius that's been converted to fahrenheit.
-      el.textContent = Math.round(out);
+      const rounded = Math.round(out);
+
+      // Simple and robust: set innerHTML to numeric value + unit span
+      el.innerHTML = `${rounded}<span class="temp-unit-symbol">°${unit}</span>`;
     });
-  
+
+    // Also update hourly unit symbols if present
+    document
+      .querySelectorAll('.temp-unit-symbol-hourly')
+      .forEach(s => (s.textContent = `°${unit}`));
+
     return;
   }
 

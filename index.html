@@ -13,14 +13,15 @@
 </head>
 
 <body>
-
+  <!-- Helps screen readers to skip to the main content -->
+    <a class="skip-link" tabindex="0" href="#main">Skip to content</a>
     
   <!-- Screen reader loading announcement -->
   <div class="sr-only" role="status" aria-live="polite" aria-atomic="true" id="loading-status">
     Loading weather data
   </div>
   <!-- Skeleton Loading/Shimmer Effects -->
-  <div class="skeleton-container" aria-hidden="true">
+  <div class="skeleton-container" aria-hidden="true" style="display: none;">
     <!-- Weather Header -->
     <div class="weather-header-skeleton">
       <div class="weather-header-components-skeleton">
