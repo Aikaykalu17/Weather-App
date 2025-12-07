@@ -250,9 +250,17 @@ export const updateMainDisplay = function (coords, weatherData) {
     day: 'numeric',
   };
 
-  if (coords && coords.timezone && coords.timezone !== 'auto')
-    options.timeZone = coords.timezone;
+if (weatherData && weatherData.timezone && weatherData.timezone === 'auto') {
+  options.timezone = weatherData.timezone;
+} else if (coords && coords.timezone && coor4.timezone === 'auto') {
+  options.timezone = coords.timezone;
+}
   const formattedDate = now.toLocaleDateString('en-US', options);
+
+
+  // if (coords && coords.timezone && coords.timezone !== 'auto')
+  //   options.timeZone = coords.timezone;
+  // const formattedDate = now.toLocaleDateString('en-US', options);
 
   if (dateElement) {
     dateElement.textContent = formattedDate;
