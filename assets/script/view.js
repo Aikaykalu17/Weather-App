@@ -252,7 +252,7 @@ export const updateMainDisplay = function (coords, weatherData) {
 
 if (weatherData && weatherData.timezone && weatherData.timezone === 'auto') {
   options.timezone = weatherData.timezone;
-} else if (coords && coords.timezone && coor4.timezone === 'auto') {
+} else if (coords && coords.timezone && coords.timezone === 'auto') {
   options.timezone = coords.timezone;
 }
   const formattedDate = now.toLocaleDateString('en-US', options);
