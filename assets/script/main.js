@@ -104,6 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+    // Event listener on the .custom-select-wrapper, to rotate the icon dropdown by toggling the active class.
   const customWrapper = document.querySelector('.custom-select-wrapper');
   customWrapper.addEventListener('click', () => {
     const iconDropdown = document.querySelector('.dropdown-icon');
@@ -240,6 +241,11 @@ document.addEventListener('DOMContentLoaded', () => {
     unitButtonContainer.addEventListener('click', ev => {
       ev.stopPropagation();
       dropDownContent.classList.toggle('dropdown-content-active');
+      
+      // Sets the aria-expanded to false or true when a click event happens.
+      const isExpanded = unitButtonContainer.getAttribute('aria-expanded') === 'true';
+      unitButtonContainer.setAttribute('aria-expanded', !isExpanded);
+      
     });
   }
   // ////////////////////////////////////////////////

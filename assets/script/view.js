@@ -32,6 +32,7 @@ export const renderDailyForecast = function (weatherData) {
     const weatherCodeDaily = weatherData.daily.weather_code;
 
     for (let i = 0; i < dailyObj.time.length; i++) {
+
       // Extracts the weather property at the current index/position.
       const dateString = dailyObj.time[i];
       const weatherCode = weatherCodeDaily[i];
@@ -57,8 +58,8 @@ export const renderDailyForecast = function (weatherData) {
             : Math.round(baseMax)
           : '-';
 
-      // Checks if baxemin is valid(not null or undefined).
-      //  checks the state of the isImperial, if it is imperial, it converts the basemin to fahrenheit, 
+      // Checks if baxemin is valid(not null or undefined), checks the state of the isImperial,
+      // if it is imperial, it converts the basemin to fahrenheit, 
       // if isImperial is metric, it just rounds the basemin.
       const displayMin =
         baseMin !== null && baseMin !== undefined
@@ -250,8 +251,8 @@ export const updateMainDisplay = function (coords, weatherData) {
     day: 'numeric',
   };
 
-// Checks if weatherdata exists and if weatherData.timezone exists and if weatherData.timezone isequqlas to auto'
-// If yes, it should be asssgined to the timezone of options else coords.timezone after passing the test should be assigned to options.timezone.
+// Checks if weatherdata exists and if weatherData.timezone exists and if weatherData.timezone is equals to auto'
+// If yes, it should be asssgined to the timezone of options. Else, coords.timezone after passing the test should be assigned to options.timezone.
 if (weatherData && weatherData.timezone && weatherData.timezone === 'auto') {
   options.timezone = weatherData.timezone;
 } else if (coords && coords.timezone && coords.timezone === 'auto') {

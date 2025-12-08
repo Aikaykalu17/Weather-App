@@ -83,7 +83,7 @@
       <div class="header-logo">
         <img src="/assets/images/logo.svg" alt="Weather App logo" class="logo-svg" />
       </div>
-      <div class="btn-unit" role="button">
+      <div class="btn-unit" role="button" aria-expanded="false" aria-controls="dropdown-content">
         <div class="menu-header">
           <img src="/assets/images/icon-units.svg" alt="Settings svg" class="settings-icon"/>
           <span class="menu-header-span">Units</span>
@@ -136,6 +136,7 @@
     </div>
   </header>
   <main>
+
     <!-- Weather prompt -->
     <section class="weather-prompt">
       <div class="weather-prompt-intro">
@@ -173,6 +174,7 @@
           </div>
         </div>
     </section>
+
     <!-- Weather Grid -->
     <section class=" details-grid">
       <dl class="metrics-grid">
@@ -194,6 +196,7 @@
         </div>
       </dl>
     </section>
+
     <!-- Daily Forecast -->
     <section class="section daily-forecast">
       <h2>Daily Forecast</h2>
@@ -274,6 +277,7 @@
         </div>
       </dl>
     </section>
+
     <!-- Hourly Forecast -->
     <section class=" hourly-forecast-section">
       <div class="hourly-forecast-header">
@@ -317,6 +321,7 @@
       <ul class="hourly-forecast-list" id="hourly-items">
       </ul>
     </section>
+
     <section class="error-section" role="alert" aria-live="assertive" aria-hidden="true">
       <div class="error-content">
         <img src="/assets/images/icon-error.svg" alt="Error Icon" class="error-icon">
@@ -327,6 +332,7 @@
             aria-label="Retry Icon" class="icon-retry">Retry</button>
       </div>
     </section>
+
   </main>
   <footer class="attribution">
     Challenge by

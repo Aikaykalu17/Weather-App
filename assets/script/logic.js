@@ -70,25 +70,9 @@ export const reverseGeocodeCoordinates = async function (lat, lon) {
         timezone: data.localityInfo?.informative?.[0]?.name || 'UTC',
       };
     }
-
-    // const geocodeResponse = await fetch(
-    //   `https://geocoding-api.open-meteo.com/v1/reverse?latitude=${lat}&longitude=${lon}`
-    // ).catch(() => null);
-    // if (geocodeResponse?.ok) {
-    //   const data = await geocodeResponse.json();
-    //   if (data?.results?.[0]) {
-    //     return {
-    //       latitude: lat,
-    //       longitude: lon,
-    //       cityName: data.results[0].name || 'Local Area',
-    //       city: data.results[0].admin1 || '',
-    //       country: data.results[0].country || 'Nigeria',
-    //       timezone: data.results[0].timezone || 'UTC',
-    //     };
-    //   }
-    // }
   } catch (e) {
     // Silently continue to timezone fallback
+ 
   }
 
 
@@ -108,7 +92,6 @@ export const reverseGeocodeCoordinates = async function (lat, lon) {
         longitude: lon,
         cityName: inferredCityName,
         country: 'Nigeria', // For Nigerian coordinates, we know the country
-        timezone,
       };
     }
   } catch (err) {
@@ -124,7 +107,7 @@ export const reverseGeocodeCoordinates = async function (lat, lon) {
   };
 };
 
-/* ---------- Build grouped daily data ---------- */
+// Build grouped daily data
 // This function converts a long array of hourly weather 
 // data into a more manageable object grouped by day.
 export const buildDailyDataFromHourly = hourly => {
@@ -156,7 +139,7 @@ export const buildDailyDataFromHourly = hourly => {
   }, {});
 };
 
-/* ---------- Main fetch & display ---------- */
+// Main fetch & display 
 export const getAndDisplayWeather = async function (coords) {
   if (!coords || (!coords.latitude && coords.latitude !== 0)) {
     showError('No search result found! Please try another location.');
@@ -166,9 +149,9 @@ export const getAndDisplayWeather = async function (coords) {
 
   // The coords is the weather information of the current location.
   state.currentDisplayCoords = coords;
+
   const forecastUrl = `https://api.open-meteo.com/v1/forecast?latitude=${coords.latitude}&longitude=${coords.longitude}&hourly=temperature_2m,weather_code,apparent_temperature,windspeed_10m,relative_humidity_2m&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum&timezone=auto&current_weather=true`;
 
-  // const forecastUrl = `https://api.open-meteo.com/v1/forecast?latitude=${coords.latitude}&longitude=${coords.longitude}&hourly=temperature_2m,weather_code,apparent_temperature,windspeed_10m,relative_humidity_2m&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum&timezone=${encodeURIComponent(coords.timezone || 'auto')}&current_weather=true&forecast_days=7`;
   try {
     const response = await fetch(forecastUrl);
     if (!response.ok) {
@@ -183,6 +166,7 @@ export const getAndDisplayWeather = async function (coords) {
       console.error('Incomplete weather data received. Cannot update UI.');
       return;
     }
+
     //  The weatherData is the result of the data fetched fromthe forecastUrl after its being parsed.
     state.globalCoords = coords;
     state.globalWeatherData = weatherData;
