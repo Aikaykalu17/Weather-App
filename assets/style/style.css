@@ -482,7 +482,7 @@ h2 {
 
     .metric-item {
         height: 6rem;
-        width: auto;
+        width: 100%;
         background-color: var(--units-bg);
         color: var(--white-text-color);
         border-radius: 0.5rem;
@@ -721,10 +721,9 @@ h3 {
     border-radius: 0.7rem;
     height: 3rem;
     width: 95%;
-    box-shadow: 0 8px 32px 0px rgba(31, 38, 135, 0.37);
+        box-shadow: 0 8px 32px 0px rgba(31, 38, 135, 0.37);
     backdrop-filter: blur(4px);
     border: 1px solid rgba(255, 255, 255, 0.5);
-
 }
 
 .temp-time {
@@ -1435,7 +1434,7 @@ h3 {
         display: flex;
         flex-direction: row;
         justify-content: space-between;
-        gap: 0rem;
+        gap: 1rem;
 
     }
 
