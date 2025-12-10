@@ -55,7 +55,7 @@ const stopSpinner = () => {
 
 
 // Retry handler is attached during DOMContentLoaded to ensure the DOM element exists
-/* ---------- Global delegated click listeners ---------- */
+//  Global delegated click listeners 
 document.addEventListener('click', e => {
 
   // Header units dropdown. If dropDownContent and unitButtonContainer exists and a click happens on an area other 
@@ -89,7 +89,7 @@ document.addEventListener('click', e => {
 
 });
 
-/* ---------- Unit / menu handlers (DOMContentLoaded) ---------- */
+//  Unit / menu handlers (DOMContentLoaded) 
 document.addEventListener('DOMContentLoaded', () => {
 
   // Ensure day select elements exist.
@@ -104,7 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-    // Event listener on the .custom-select-wrapper, to rotate the icon dropdown by toggling the active class.
+  // Event listener on the .custom-select-wrapper, to rotate the icon dropdown by toggling the active class.
   const customWrapper = document.querySelector('.custom-select-wrapper');
   customWrapper.addEventListener('click', () => {
     const iconDropdown = document.querySelector('.dropdown-icon');
@@ -241,11 +241,11 @@ document.addEventListener('DOMContentLoaded', () => {
     unitButtonContainer.addEventListener('click', ev => {
       ev.stopPropagation();
       dropDownContent.classList.toggle('dropdown-content-active');
-      
+
       // Sets the aria-expanded to false or true when a click event happens.
       const isExpanded = unitButtonContainer.getAttribute('aria-expanded') === 'true';
       unitButtonContainer.setAttribute('aria-expanded', !isExpanded);
-      
+
     });
   }
   // ////////////////////////////////////////////////
@@ -315,7 +315,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   unitOptions.forEach(option => {
-    
+
     // Ensure ARIA role + initial tabindex are present
     option.setAttribute('role', 'radio');
     option.setAttribute('tabindex', option.getAttribute('aria-checked') === 'true' ? '0' : '-1');
@@ -333,7 +333,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const group = option.closest('[role="radiogroup"]') || option.parentElement;
       const options = Array.from(group.querySelectorAll('.unit-option'));
       const idx = options.indexOf(option);
-     
+
       if (key === 'Enter' || key === ' ') {
         e.preventDefault();
         selectUnitOption(option);

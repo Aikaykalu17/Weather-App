@@ -94,7 +94,7 @@ export const convertHourlyDataToObjects = function (hourlyData) {
   return processedArray;
 };
 
-/* ---------- Utilities ---------- */
+//   Utilities
 // THis function takes a date string, converts it into a javascript date object.
 // It must convert a date string into a javaScript Date object because the string alone is just text.
 export const getDayName = function (dateString, full = false, tz) {
